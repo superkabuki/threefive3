@@ -1,20 +1,20 @@
-[SCTE-35 Cli](#the-cli-tool) |[SCTE-35 Xml ](https://github.com/superkabuki/scte35/xml.md) | [Cue Class](https://github.com/superkabuki/scte35/cue.md) | [Stream Class](https://github.com/superkabuki/scte35/stream.md) 
+[Install](#install) |[SCTE-35 Cli](#the-cli-tool) |[SCTE-35 Xml ](https://github.com/superkabuki/scte35/xml.md) | [Cue Class](https://github.com/superkabuki/scte35/cue.md) | [Stream Class](https://github.com/superkabuki/scte35/stream.md) 
 
 
 # threefive3
 
-* Q. `What is the latest version?`
+* Q. What is the latest version?
 
 * A.  `v3.0.11`
 ---
-* Q. `How do I upgrade my code to threefive3?`
+* Q. How do I upgrade my code from threefive to the __more powerful super advanced threefive3?__
 
 * A. `sed.`
 ```js
 sed -i 's/threefive/threefive3/g'
 ```
 ---
-* Q. `Does threefive3 have super cool new features?`
+* Q. Does threefive3 have super cool new features?
 
 * A. `Yes.`
 ---
@@ -65,7 +65,7 @@ ___
 | __HLS__         |`threefive3 hls https://example.com/master.m3u8`                                                             |
 | __JSON__        |`threefive3 < json.json`  |
 | __Xml__         | `threefive3  < xml.xml`                                                                                     |
-| __Xmlbin__      | `threefive3 < xmlbin.xml`                                                                                   |
+| __Xmlbin__      | `js threefive3 < xmlbin.xml`                                                                                   |
 
 # Streams
 
@@ -99,56 +99,64 @@ ___
 
 ### `hls`
 * parse hls manifests and segments for SCTE-35
-```rebol
+```smalltalk
 threefive3 hls https://example.com/master.m3u8
 ```
 ___
 ### `Iframes`
 * Show iframes PTS in an MPEGTS video
-```rebol
+
+```smalltalk
 threefive3 iframes https://example.com/video.ts
 ```
 ___
 ### `packets`   
 * Print raw SCTE-35 packets from multicast mpegts video
-```rebol
+
+```smalltalk
 threefive3 packets udp://@235.35.3.5:3535
 ```
 ___
 ### `proxy`   
 * Parse a https stream and write raw video to stdout
-```rebol
+
+```smalltalk
 threefive3 proxy video.ts
 ```
 ___
 ### `pts`    
 * Print PTS from mpegts video
-```rebol
- threefive3 pts video.ts
+
+```smalltalk
+threefive3 pts video.ts
 ```
 ___
 ### `sidecar`  
 * Parse a stream, write pts,write SCTE-35 Cues to sidecar.txt
-```rebol
-  threefive3 sidecar video.ts
+
+```smalltalk
+threefive3 sidecar video.ts
 ```
 ___
 ### `sixfix`  
 * Fix SCTE-35 data mangled by ffmpeg
-```rebol
- threefive3 sixfix video.ts
+
+```smalltalk
+threefive3 sixfix video.ts
 ```
 ___
 ### `show`  
 
 * Probe mpegts video _( kind of like ffprobe )_
-```rebol
+
+```smalltalk
  threefive3 show video.ts
 ```
 ___
 ### `version`     
 * Show version
-```rebol
+
+```smalltalk
  threefive3 version
 ```
 ___
