@@ -1,4 +1,4 @@
-[Cue Class Docs](https://github.com/superkabuki/scte35/cue.md) | [Stream Class Docs](https://github.com/superkabuki/scte35/stream.md)
+[SCTE-35 Xml ](https://github.com/superkabuki/scte35/xml.md) | [Cue Class](https://github.com/superkabuki/scte35/cue.md) | [Stream Class](https://github.com/superkabuki/scte35/stream.md) | 
 
 
 # threefive3
