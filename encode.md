@@ -12,20 +12,23 @@
 
 * A decoded __Cue__ instance contains: 
 
-     * **cue.info_section** one **SpliceInfoSection**
+     * One __Info Section__
+  
+     * One __Splice Command__
 
-     * **cue.command**  one of the following:
-       **  **BandwidthReservation**
-       ** **PrivateCommand**
-       ** **SpliceInsert** 
-       ** **SpliceNull**
-       ** **TimeSignal** 
+           
+       * __BandwidthReservation__
+        * __PrivateCommand__
+        * __SpliceInsert__ 
+        * __SpliceNull__
+        * __TimeSignal__ 
 
-     * **cue.descriptors** a list of 0 or more of the following:
-        ** **AvailDescriptor** 
-        ** **DtmfDescriptor**
-       ** **SegmentationDescriptor** 
-       ** **TimeDescriptor**
+     * Zero or more __Splice Descriptors__  
+
+       * __AvailDescriptor__ 
+        * __DtmfDescriptor__
+        * __SegmentationDescriptor__ 
+        * __TimeDescriptor__
        
 * All instance vars can be accessed via dot notation.
 
