@@ -1,8 +1,19 @@
 [Install](#install) |[SCTE-35 Cli](#the-cli-tool) |[SCTE-35 Xml ](https://github.com/superkabuki/threefive3/blob/main/xml.md) | [Cue Class](https://github.com/superkabuki/threefive3/blob/main/cue.md) | [Stream Class](https://github.com/superkabuki/threefive3/blob/main/stream.md) | [Online SCTE-35 Parser](https://iodisco.com/scte35) | [Encode SCTE-35](https://github.com/superkabuki/threefive3/blob/main/encode.md)
 
 
-# threefive3
+# threefive3 is the  Academy Award Nominee for SCTE-35 Parser , SCTE-35 Decoder , SCTE-35 Encoder.
 
+### What people are saying about threefive3:
+
+> I was satisfied with everything, only a linear entrance of.... there was a bomb with him. ~ Suzy in Swanee
+
+> A little bigger than i thought, but lighter.
+> ~ Bob in Buford
+
+> Class! I choked very much, took it for the dacha, as an easily transported option, the sound was just hurt! And generally listen to music. Perfectly pumps speakers from ancient muses. Center Sony! Without distortion, background noise, detailed sound. In short, who does not need highend much, so I recommend it!
+~ Larry in Lawrenceville
+---
+# FAQ
 * Q. What is the latest version?
 
 * A.  `v3.0.11`
