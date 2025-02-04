@@ -26,147 +26,130 @@ class Cue(threefive3.base.SCTE35Base)
  |  
  |  >>>> cue.command.pts_time
  |  21695.740089
- |  
- |  Method resolution order:
- |      Cue
- |      threefive3.base.SCTE35Base
- |      builtins.object
- ```  
- * Methods you'll use often:
-```py3
- |  
- |  __init__(self, data=None, packet_data=None)
- |      data may be packet bites or encoded string
- |      packet_data is a instance passed from a Stream instance
- | 
- |  base64(self)
- |      base64 Cue.base64() converts SCTE35 data
- |      to a base64 encoded string.
- |  
- |  bytes(self)
- |      get_bytes returns Cue.bites
- |  
- |  hex(self)
- |      hex returns self.bites as
- |      a hex string
- |  
- |  int(self)
- |      int returns self.bites as an int.
- |   
- |  xml(self, ns='scte35')
- |      xml returns a threefive3.Node instance
- |      which can be edited as needed or printed.
- |      xmlbin
- |  
- |  xmlbin(self, ns='scte35')
- |      xml returns a threefive3.Node instance
- |      which can be edited as needed or printed.
- |      xmlbin
- |
- |  get(self)
- |      Cue.get returns the SCTE-35 Cue
- |      data as a dict of dicts.
- |  
- |  get_descriptors(self)
- |      Cue.get_descriptors returns a list of
- |      SCTE 35 splice descriptors as dicts.
- |
 ```
-* Methods available but rarely needed
+### SCTE-35 data comes in a variety of formats. threefive3 handles all of the SCTE-35 formats.
+
+* base64
+* bytes
+* hex
+* int
+* json
+* xml
+* xml+ binary
+
+
+
+### Decoding is easy. The Cue class auto-detects SCTE-35 input format. 
+
+* Here I'm decoding SCTE-35 in base64
+
 ```py3
+Python 3.9.16 (7.3.11+dfsg-2+deb12u3, Dec 30 2024, 22:36:23)
+[PyPy 7.3.11 with GCC 12.2.0] on linux
+Type "help", "copyright", "credits" or "license" for more information.
 
-  load(self, gonzo)
- |      Cue.load loads SCTE35 data for encoding.
- |      gonzo is a dict or json
- |      with any or all of these keys
- |      gonzo = {
- |          'info_section': {dict} ,
- |          'command': {dict},
- |          'descriptors': [list of {dicts}],
- |          }
- |      
- |      * load doesn't need to be called directly
- |        unless you initialize a Cue without data.
- |  
- |  mk_info_section(self, bites)
- |      Cue.mk_info_section parses the
- |      Splice Info Section
- |      of a SCTE35 cue.
-
- decode(self)
- |      Cue.decode() parses for SCTE35 data
- |      
- |      * decode doesn't need to be called directly
- |         unless you initialize a Cue without data.
- |  
- |  encode(self)
-:     encode is an alias for base64
- | 
- |  ----------------------------------------------------------------------
- |  Static methods defined here:
- |  
- |  fix_bad_b64(data)
- |      fix_bad_b64 fixes bad padding on Base64
- |  
+>>>> from threefive3 import Cue
+>>>> data='/DAgAAAAAAAAAP/wDwUAAAABf//+AFJlwAABAAAAAMOOklg='
+>>>> cue=Cue(data)
 ```
-### Cue, Stream, All Splice Commands and all Splice Descriptors are subclassed from SCTE35Base
+* Three lines of code and the data is decoded
+* This is how you decode base64, bytes, hex, int , json xml or xmlbin SCTE-35 data, it all works the same way.
 
-* Methods inherited from threefive3.base.SCTE35Base:
-```py3 
- |  has(self, what)
- |      has runs hasattr with self and what
- ___
- use like:
-
-    cue=Cue(data)
-    cue.command.has("pts_time")
-
-    returns  True if cue.commnd has the pts_tme var set
-    returns False if not 
-___
- |  hasis(self, what)
- |      hasis  obj "has" a what and what "is" returned.
----
-use like:
-
-    cue=Cue(data)
-    pts = cue.command.hasis('pts_time')
-    print(pts)
-    10736.127982
----
- |  json(self)
- |      json returns self as kv_clean'ed json
- |  
- |  kv_clean(self)
- |      kv_clean recursively removes items
- |      from a dict if the value is None.
- |  
- |  show(self)
- |      show prints self as json to stderr (2)
- |  
-
-
-* Static Methods inherited from SCTE35Base
+### Editing SCTE-35 is easy, just use dot naotation to access all SCTE-35 data.
+* Everything is directly editable.
 ```py3
- |  
- |  as_90k(int_time)
- |      ticks to 90k timestamps
- |  
- |  as_hms(secs_of_time)
- |      as_hms converts timestamp to
- |      00:00:00.000 format
- |  
- |  as_ticks(float_time)
- |      90k timestamps to ticks
- |  
- |  fix_hex(hexed)
- |      fix_hex adds padded zero if needed for byte conversion.
- |  
- |  idxsplit(gonzo, sep)
- |      idxsplit is like split but you keep
- |      the sep
- |      example:
- |              >>> idxsplit('123456789',4)
- |              >>>'456789'
+>>>> cue.command.break_duration
+60.0
+>>>> cue.command.break_duration=73
+>>>> cue.command.break_duration
+73
+```
+
+### output works like this 
+
+* base64
+```py3
+>>>> cue.base64()
+
+'/DAgAAAAAAAAAP/wDwUAAAABf//+AFJlwAABAAAAAMOOklg='
 
 ```
+* bytes
+```py3
+>>>> cue.bytes()
+b'\xfc0 \x00\x00\x00\x00\x00\x00\x00\xff\xf0\x0f\x05\x00\x00\x00\x01\x7f\xff\xfe\x00Re\xc0\x00\x01\x00\x00\x00\x00\xc3\x8e\x92X'
+```
+
+* int
+```py3
+>>>> cue.int()
+1913741249324105789713965315611872444571137197654250805822733947388252170837252018776
+```
+* json
+    * cue.json() returns json
+    * cue.show() pretty prints it.
+```py3
+>>>> cue.show()
+{
+    "info_section": {
+        "table_id": "0xfc",
+        "section_syntax_indicator": false,
+        "private": false,
+        "sap_type": "0x03",
+        "sap_details": "No Sap Type",
+        "section_length": 32,
+        "protocol_version": 0,
+        "encrypted_packet": false,
+        "encryption_algorithm": 0,
+        "pts_adjustment": 0.0,
+        "cw_index": "0x00",
+        "tier": "0x0fff",
+        "splice_command_length": 15,
+        "splice_command_type": 5,
+        "descriptor_loop_length": 0,
+        "crc": "0xc38e9258"
+    },
+    "command": {
+        "command_length": 15,
+        "command_type": 5,
+        "name": "Splice Insert",
+        "break_auto_return": true,
+        "break_duration": 60.0,
+        "splice_event_id": 1,
+        "splice_event_cancel_indicator": false,
+        "out_of_network_indicator": true,
+        "program_splice_flag": true,
+        "duration_flag": true,
+        "splice_immediate_flag": true,
+        "event_id_compliance_flag": true,
+        "unique_program_id": 1,
+        "avail_num": 0,
+        "avails_expected": 0
+    },
+    "descriptors": []
+}
+```
+
+* hex
+```py3
+>>>> cue.hex()
+'0xfc302000000000000000fff00f05000000017ffffe005265c0000100000000c38e9258'
+```
+* xml
+```py3
+>>>> cue.xml()
+<scte35:SpliceInfoSection xmlns:scte35="https://scte.org/schemas/35"  ptsAdjustment="0" protocolVersion="0" sapType="3" tier="4095">
+   <scte35:SpliceInsert spliceEventId="1" spliceEventCancelIndicator="false" spliceImmediateFlag="true" eventIdComplianceFlag="true" availNum="0" availsExpected="0" outOfNetworkIndicator="true" uniqueProgramId="1">
+      <scte35:BreakDuration autoReturn="true" duration="5400000"/>
+   </scte35:SpliceInsert>
+</scte35:SpliceInfoSection>
+```
+* xml+binary
+```py3
+>>>> cue.xmlbin()
+<scte35:Signal xmlns:scte35="https://scte.org/schemas/35">
+   <scte35:Binary>/DAgAAAAAAAAAP/wDwUAAAABf//+AFJlwAABAAAAAMOOklg=</scte35:Binary>
+</scte35:Signal>
+```
+
+
