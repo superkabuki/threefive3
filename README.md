@@ -1,18 +1,28 @@
 [Install](#install) |[SCTE-35 Cli](#the-cli-tool) |[SCTE-35 Xml ](https://github.com/superkabuki/threefive3/blob/main/xml.md) | [Cue Class](https://github.com/superkabuki/threefive3/blob/main/cue.md) | [Stream Class](https://github.com/superkabuki/threefive3/blob/main/stream.md) | [Online SCTE-35 Parser](https://iodisco.com/scte35) | [Encode SCTE-35](https://github.com/superkabuki/threefive3/blob/main/encode.md)
 
 
-# threefive3 is the  Academy Award Nominee for SCTE-35 Parser , SCTE-35 Decoder , SCTE-35 Encoder.
+# threefive3 is the  Academy Award Nominee for Best SCTE-35 Parser , Best SCTE-35 Decoder ,and Best SCTE-35 Encoder.
 
-### What people are saying about threefive3:
 
-> I was satisfied with everything, only a linear entrance of.... there was a bomb with him. ~ Suzy in Swanee
+ _It's an honor just to be nominated._ ~ Adrian of Doom
+<br>
+<br>
+# What people are saying about threefive3:
 
-> A little bigger than i thought, but lighter.
-> ~ Bob in Buford
+<br>
 
-> Class! I choked very much, took it for the dacha, as an easily transported option, the sound was just hurt! And generally listen to music. Perfectly pumps speakers from ancient muses. Center Sony! Without distortion, background noise, detailed sound. In short, who does not need highend much, so I recommend it!
-~ Larry in Lawrenceville
----
+_I was satisfied with everything, only a linear entrance of.... there was a bomb with him._  ~ __Suzy in Swanee__
+<br>
+___
+_A little bigger than i thought, but lighter._  ~ __Bob in Buford__
+<br>
+___
+_Class! I choked very much, took it for the dacha, as an easily transported option, the sound was just hurt! And generally listen to music. Perfectly pumps speakers from ancient muses. Center Sony! Without distortion, background noise, detailed sound. In short, who does not need highend much, so I recommend it!_
+~ __Larry in Lawrenceville__
+<br>
+___
+
+
 # FAQ
 * Q. What is the latest version?
 
