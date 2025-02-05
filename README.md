@@ -61,10 +61,9 @@ make install
 ___
 
 # `The Cli tool`
-> The cli audetects data being available on stdin and that allows it to autodetect the SCTE-35 format as well as MPEGTS steams. Now every SCTE-35 data format, except hls, is autodetected on the commandline, as well as stdin.HLS requires the `hls` ketyword.
+> The cli polls stdin and that allows it to autodetect the SCTE-35 format as well as MPEGTS steams. Now every SCTE-35 data format, except hls, is autodetected on the commandline, as well as stdin.<br>HLS requires the `hls` ketyword.
 
 ### The cli tool installs automatically with pip or the Makefile.
-
 
 * [__SCTE-35 Inputs__](#inputs)
 * [__SCTE-35 Outputs__](#outputs)
@@ -73,7 +72,6 @@ ___
 * [Display __MPEGTS__ __iframes__](#iframes)
 * [Display raw __SCTE-35 packets__ from __video streams__](#packets)
 * [__Repair SCTE-35 streams__ changed to __bin data__ by __ffmpeg__](#sixfix)
-
 
 # `Inputs`
 
