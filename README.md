@@ -1,10 +1,13 @@
 [Install](#install) |[SCTE-35 Cli](#the-cli-tool) |[SCTE-35 Xml ](https://github.com/superkabuki/threefive3/blob/main/xml.md) | [Cue Class](https://github.com/superkabuki/threefive3/blob/main/cue.md) | [Stream Class](https://github.com/superkabuki/threefive3/blob/main/stream.md) | [Online SCTE-35 Parser](https://iodisco.com/scte35) | [Encode SCTE-35](https://github.com/superkabuki/threefive3/blob/main/encode.md)
 
 
-# threefive3 is the  Academy Award Nominee for Best SCTE-35 Parser , Best SCTE-35 Decoder ,and Best SCTE-35 Encoder.
-
-
- _It's an honor just to be nominated._ ~ Adrian of Doom
+# threefive3
+SCTE-35 Parser  ✅
+SCTE-35 Encoder ✅
+SCTE-35 HLS     ✅
+SCTE-35 Xml     ✅
+SCTE-35 Cli     ✅
+SCTE-35 library ✅
 <br>
 <br>
 # What people are saying about threefive3:
