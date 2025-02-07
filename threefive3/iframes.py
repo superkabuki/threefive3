@@ -5,7 +5,7 @@ threefive3.iframes
 
 import sys
 from functools import partial
-from new_reader import reader
+from .new_reader import reader
 from .spare import print2
 
 
