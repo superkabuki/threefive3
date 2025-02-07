@@ -6,6 +6,7 @@ scte35.hls  hls.py
 """
 
 import datetime
+import os
 import sys
 import time
 from collections import deque
@@ -152,8 +153,10 @@ class Scte35Profile:
 
     @staticmethod
     def _clean(line):
+        '''
+        remove whitespace and quotes
+        '''
         translate_map = {34: 94, 10: 94, 9: 94, 32: 94, 39: 94}
-        # translate " ", "\n", "\t", '"', "'" to ^ and delete.
         return line.translate(translate_map).replace("^", "")
 
     def clean_n_split(self, line):
@@ -209,13 +212,12 @@ class Scte35Profile:
 
     def read_profile(self, pro_file):
         """
-        read_profile reads sc.profile
+        read_profile reads hls.profile
         """
-        try:
+        if os.path.isfile(pro_file):
             with open(pro_file, "r", encoding="utf-8") as pro_handle:
                 self._parse_profile(pro_handle)
-        finally:
-            self.show_profile("Profile:")
+        self.show_profile("Profile:")
 
     def set_pts(self, cue):
         """
@@ -272,7 +274,7 @@ class Scte35Profile:
         """
         validate_splice_insert is named appropriately.
         """
-        line = self._is_splice_insert_cueout(self, cue)
+        line = self._is_splice_insert_cueout(cue)
         if not line:
             line = "#EXT-X-CUE-IN\n"
         return line
@@ -892,7 +894,7 @@ class CuePuller:
 
     def chk_window_size(self, lines):
         """
-        chk_window_size sets the sliding window size
+        mk_window_size sets the sliding window size
         for the output to match that off the input and
         determine how long to keep media data info
         for segments.
