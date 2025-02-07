@@ -449,21 +449,18 @@ class Stream:
             head_size += afl + 1  # +1 for afl byte
         return pkt[head_size:]
 
-    def _pmt_pid(self, pkt, pid, outdata):
+    def _pmt_pid(self, pkt, pid):
         if pid in self.pids.pmt:
             pay = self._parse_payload(pkt)
-            outdata = self._parse_pmt(pay, pid)
-        return outdata
+            self._parse_pmt(pay, pid)
 
-    def _pat_pid(self, pay, pid, outdata):
+    def _pat_pid(self, pay, pid):
         if pid == self.pids.PAT_PID:
-            outdata = self._parse_pat(pay)
-        return outdata
+            self._parse_pat(pay)
 
-    def _sdt_pid(self, pay, pid, outdata):
+    def _sdt_pid(self, pay, pid,):
         if pid == self.pids.SDT_PID:
-            outdata = self._parse_sdt(pay)
-        return outdata
+           self._parse_sdt(pay)
 
     def _parse_tables(self, pkt, pid):
         """
@@ -471,14 +468,11 @@ class Stream:
         PAT, PMT,  and SDT tables
         based on pid of the pkt
         """
-        outdata = False
+        self._pmt_pid(pkt, pid,)
         pay = self._parse_payload(pkt)
-        if self._same_as_last(pay, pid):
-            return outdata
-        outdata = self._pmt_pid(pkt, pid, outdata)
-        outdata = self._pat_pid(pay, pid, outdata)
-        outdata = self._sdt_pid(pay, pid, outdata)
-        return outdata
+        if not self._same_as_last(pay, pid):
+            self._pat_pid(pay, pid)
+            self._sdt_pid(pay, pid)
 
     def _parse_info(self, pkt):
         """
@@ -508,6 +502,7 @@ class Stream:
         pid = self._parse_info(pkt)
         if pid in self.pids.pcr:
             self._chk_pcr(pkt, pid)
+        if self._pusi_flag(pkt):
             self._chk_pts(pkt, pid)
         return self._chk_scte35(pkt, pid)
 
@@ -515,7 +510,7 @@ class Stream:
         #  return pid in self.pids.scte35.union(self.pids.maybe_scte35) #   union sucks. 4.47 secs
         # return (pid in self.pids.scte35 or pid in self.pids.maybe_scte35) # 3.37 secs
         return pid in (self.pids.scte35 or self.pids.maybe_scte35) # 3.326 secs
-        # return pid in (self.pids.scte35|self.pids.maybe_scte35)  # wtf? 4.128  secs 
+        # return pid in (self.pids.scte35|self.pids.maybe_scte35)  # wtf? 4.128  secs
 
     def _chk_partial(self, pay, pid, sep):
         if pid in self.maps.partial:
@@ -668,9 +663,7 @@ class Stream:
             self.maps.prgm[program_number] = ProgramInfo()
         pinfo = self.maps.prgm[program_number]
         pinfo.pid = pid
-        print(pid)
         pinfo.pcr_pid = pcr_pid
-        print(pcr_pid)
         self.pids.pcr.add(pcr_pid)
         self.maps.pid_prgm[pcr_pid] = program_number
         proginfolen = self._parse_length(pay[10], pay[11])
@@ -686,7 +679,7 @@ class Stream:
         """
         # 5 bytes for stream_type info
         chunk_size = 5
-        end_idx = (idx + si_len) - chunk_size
+        end_idx = (idx + si_len) -4
         while idx < end_idx:
             stream_type, pid, ei_len = self._parse_stream_type(pay, idx)
             pinfo = self.maps.prgm[program_number]
