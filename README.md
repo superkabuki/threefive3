@@ -32,7 +32,7 @@ ___
 # FAQ
 * Q. What is the latest version?
 
-* A.  `v3.0.11`
+* A.  `v3.0.13`
 ---
 * Q. How do I upgrade my code from threefive to the __more powerful super advanced threefive3?__
 
