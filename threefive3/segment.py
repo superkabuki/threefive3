@@ -121,8 +121,10 @@ class Segment(Stream):
         decode a mpegts segment.
         """
         super().decode(func=self.show_cue)
-        self.pts_start = self.as_90k(self.start.popitem()[1])
-        self.pts_last = self.as_90k(list(self.maps.prgm_pts.items())[0][1])
+        if self.start:
+            self.pts_start = self.as_90k(self.start.popitem()[1])
+            self.pts_last = self.as_90k(list(self.maps.prgm_pts.items())[0][1])
+            self.duration = round(self.pts_last - self.pts_start, 6)
+
         if self.tmp:
             os.unlink(self.tmp)
-        self.duration = round(self.pts_last - self.pts_start, 6)
