@@ -18,6 +18,9 @@ class BitBin:
         self.bitsize = self.idx = len(bites) << 3
         self.bits = int.from_bytes(bites, byteorder="big")
 
+    def __repr__(self):
+      return str(vars(self))
+
     def as_90k(self, num_bits):
         """
         Returns num_bits
