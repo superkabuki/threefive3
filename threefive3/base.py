@@ -100,9 +100,10 @@ class SCTE35Base:
     def has(self, what):
         """
         has runs hasattr with self and what
+        returns value if set.
         """
         if hasattr(self, what):
-            return True
+            return vars(self)[what]
         return False
 
     def hasis(self, what):
@@ -148,26 +149,25 @@ class SCTE35Base:
             if isinstance(val, (bytes, bytearray)):
                 val = list(val)
             return val
-
+        
         return {k: b2l(v) for k, v in vars(self).items() if v is not None}
 
-    def _load_str(self, gonzo):
+    def _json2dict(self, gonzo):
         if isinstance(gonzo, str):
             gonzo = json.loads(gonzo)
         return gonzo
 
-    def _chk_prevars(self, k, v, prevars):
-        if k in prevars:
+    def _chk_vars(self, k, v):
+        if k in  vars(self):
             self.__dict__[k] = v
 
-    def _vrfy_load(self, gonzo, prevars):
+    def _vrfy_load(self, gonzo):
         for k, v in gonzo.items():
-            self._chk_prevars(k, v, prevars)
+            self._chk_vars(k, v)
 
     def _load_dict(self, gonzo):
         if isinstance(gonzo, dict):
-            prevars = vars(self)
-            self._vrfy_load(gonzo, prevars)
+            self._vrfy_load(gonzo)
 
     def load(self, gonzo):
         """
@@ -175,7 +175,7 @@ class SCTE35Base:
         data from a dict or json string.
         only updates vars that exist in the obj.
         """
-        gonzo = self._load_str(gonzo)
+        gonzo = self._json2dict(gonzo)
         self._load_dict(gonzo)
 
     def show(self):
