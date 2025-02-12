@@ -2,43 +2,14 @@
 
 
 # threefive3
-SCTE-35 Parser  ✅
-SCTE-35 Encoder ✅
-SCTE-35 HLS     ✅
-SCTE-35 Xml     ✅
-SCTE-35 Cli     ✅
-SCTE-35 library ✅
+* SCTE-35 Parser  ✅
+* SCTE-35 Encoder ✅
+* SCTE-35 HLS     ✅
+* SCTE-35 Xml     ✅
+* SCTE-35 Cli     ✅
+* SCTE-35 library ✅
 <br>
 <br>
-# What people are saying about threefive3:
-
-<br>
-
-
-_It's good, it's good. It's good. It's good. It's good. It's good. It's good. It's good. It's good. It's good_
-~ __Connie in Columbia__
-<br>
-___
-
-_that threefive guy is hot!_ ~ __Martha Stewart and Cindy Crawford__ 
-<br>
-
-___
-_I was satisfied with everything, only a linear entrance of.... there was a bomb with him._  ~ __Suzy in Swanee__
-<br>
-___
-
-_A little bigger than i thought, but lighter._  ~ __Bob in Buford__
-<br>
-___
-
-_Class! I choked very much, took it for the dacha, as an easily transported option, the sound was just hurt! And generally listen to music. Perfectly pumps speakers from ancient muses. Center Sony! Without distortion, background noise, detailed sound. In short, who does not need highend much, so I recommend it!_
-~ __Larry in Lawrenceville__
-<br>
-
-<br>
-
-___
 
 # FAQ
 * Q. What is the latest version?
@@ -203,5 +174,41 @@ ___
 ```
 ## [iodisco.com/scte35](https://iodisco.com/scte35)
 ![image](https://github.com/user-attachments/assets/4df85c44-a078-4da0-97e2-5daefcf2509d)
+
+
+
+
+
+
+# What people are saying about threefive3:
+
+<br>
+
+
+_It's good, it's good. It's good. It's good. It's good. It's good. It's good. It's good. It's good. It's good_
+~ __Connie in Columbia__
+<br>
+___
+
+_that threefive guy is hot!_ ~ __Martha Stewart and Cindy Crawford__ 
+<br>
+
+___
+_I was satisfied with everything, only a linear entrance of.... there was a bomb with him._  ~ __Suzy in Swanee__
+<br>
+___
+
+_A little bigger than i thought, but lighter._  ~ __Bob in Buford__
+<br>
+___
+
+_Class! I choked very much, took it for the dacha, as an easily transported option, the sound was just hurt! And generally listen to music. Perfectly pumps speakers from ancient muses. Center Sony! Without distortion, background noise, detailed sound. In short, who does not need highend much, so I recommend it!_
+~ __Larry in Lawrenceville__
+<br>
+
+<br>
+
+___
+
 
 
