@@ -1,6 +1,6 @@
 # Encoding
 
-* [SCTE35 Cue with a Time Signal Command in Seven Steps](#scte35-cue-with-a-time-signal-command-in-seven-steps) 
+* [Encode a SCTE35 Cue with a Time Signal Command in Seven Steps](#scte35-cue-with-a-time-signal-command-in-seven-steps) 
 
 * [Edit A Splice Insert Command in a SCTE35 Cue](#edit-a-splice-insert-command-in-a--scte35-cue)
 
@@ -12,19 +12,16 @@
 
 * A decoded __Cue__ instance contains: 
 
-     * One __Info Section__
+     * One `Info Section`
   
-     * One __Splice Command__
-
-           
+     * One `Splice Command`
        * __BandwidthReservation__
         * __PrivateCommand__
         * __SpliceInsert__ 
         * __SpliceNull__
         * __TimeSignal__ 
 
-     * Zero or more __Splice Descriptors__  
-
+     * Zero or more `Splice Descriptors`  
        * __AvailDescriptor__ 
         * __DtmfDescriptor__
         * __SegmentationDescriptor__ 
@@ -37,6 +34,7 @@
     * length vars for Cue.command and Cue.descriptors are automatically generated.  
     * Descriptor loop length and crc32 are automatically calculated 
 
+# Encoding Examples
 
 ## SCTE35 Cue with a Time Signal Command in Seven Steps
 
@@ -125,8 +123,9 @@
 
 ```
 
+___
 
-### Edit A Splice Insert Command in a  SCTE35 Cue 
+## Edit A Splice Insert Command in a SCTE35 Cue 
 ```python3
 a@fumatica:~/threefive$ pypy3
 Python 3.7.10 (7.3.5+dfsg-2, Jun 03 2021, 20:39:46)
@@ -137,14 +136,14 @@ Type "help", "copyright", "credits" or "license" for more information.
 >>>> cue = threefive3.Cue(Base64)
 >>>> cue.command
 {'calculated_length': 20, 'command_type': 5, 'name': 'Splice Insert', 'time_specified_flag': True, 'pts_time': 21514.559089, 'break_auto_return': True, 'break_duration': 60.293567, 'splice_event_id': 1207959695, 'splice_event_cancel_indicator': False, 'out_of_network_indicator': True, 'program_splice_flag': True, 'duration_flag': True, 'splice_immediate_flag': False, 'component_count': None, 'components': None, 'unique_program_id': 0, 'avail_num': 0, 'avail_expected': 0}
+```
 
-
-# Access vars with dot notation
-
+### Access vars with dot notation
+```
 >>>> cue.command.break_duration= 90.0
-
-# re-encode
-
+```
+### re-encode
+```
 >>>> cue.encode()
 '/DAvAAAAAAAA///wFAVIAACPf+/+c2nALv4Ae5igAAAAAAAKAAhDVUVJAAABNVB2fJs='
 >>>> 
@@ -197,7 +196,8 @@ Type "help", "copyright", "credits" or "license" for more information.
     ]
 }
 ```
-### Remove a Splice Descriptor from a SCTE35 Cue
+## Remove a Splice Descriptor from a SCTE35 Cue
+
 ```python3
 >>>> import threefive3
 >>>> Base64 = "/DAvAAAAAAAA///wFAVIAACPf+/+c2nALv4AUsz1AAAAAAAKAAhDVUVJAAABNWLbowo="
@@ -250,15 +250,18 @@ Type "help", "copyright", "credits" or "license" for more information.
         }
     ]
 }
-
-# delete the descriptor from descriptors
-
+```
+### delete the descriptor from descriptors
+```smalltalk
 >>>> del cue.descriptors[0]
-
-# re-encode 
-
+```
+### re-encode 
+```smalltalk
 >>>> cue.encode()
 '/DAlAAAAAAAA///wFAVIAACPf+/+c2nALv4AUsz1AAAAAAAAYinJUA=='
+```
+### show
+```rebol
 >>>> cue.show()
 {
     "info_section": {
@@ -302,7 +305,10 @@ Type "help", "copyright", "credits" or "license" for more information.
 }
 
 ```
-### Add a Dtmf Descriptor to an existing  SCTE35 Cue
+---
+
+### Add a Dtmf Descriptor to an existing SCTE35 Cue
+
 ```python3
 >>>> import threefive3
 >>>> Base64 = "/DAvAAAAAAAA///wFAVIAACPf+/+c2nALv4AUsz1AAAAAAAKAAhDVUVJAAABNWLbowo="
@@ -310,26 +316,27 @@ Type "help", "copyright", "credits" or "license" for more information.
 >>>> dscrptr = threefive3.DtmfDescriptor()
 >>>> dscrptr
 {'tag': 1, 'descriptor_length': 0, 'identifier': None, 'bites': None, 'name': 'DTMF Descriptor', 'preroll': None, 'dtmf_count': None, 'dtmf_chars': []}
-
- # My data to load into the DtmfDescriptor instance
-
+```
+ ### data to load into the DtmfDescriptor instance
+```js
 >>>> data = {'tag': 1, 'descriptor_length': 10, 'identifier': 'CUEI', 'name': 'DTMF Descriptor', 'preroll': 177, 'dtmf_count': 4, 'dtmf_chars': ['1'\
 , '2', '1', '#']}
 
- #  All Splice Commands and Descriptors have a load method
-
-
+```
+### The Cue class and  all Splice Commands and all Descriptors have a load method, use it.
+```js
 >>>> dscrptr.load(data)
 
 >>>> dscrptr
 {'tag': 1, 'descriptor_length': 10, 'identifier': 'CUEI', 'bites': None, 'name': 'DTMF Descriptor', 'preroll': 177, 'dtmf_count': 4, 'dtmf_chars': ['1', '2', '1', '#']}
+```
 
-
-  # Append to cue.descrptors
-
+  ### Append to cue.descrptors
+```js
 
 >>>> cue.descriptors.append(dscrptr)
   # Run encode to generate new Base64 string
 >>>> cue.encode()
 b'/DA7AAAAAAAA///wFAVIAACPf+/+c2nALv4AUsz1AAAAAAAWAAhDVUVJAAABNQEKQ1VFSbGfMTIxI55FecI='
 ```
+---
