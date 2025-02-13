@@ -502,8 +502,8 @@ class Stream:
         pid = self._parse_info(pkt)
         if pid in self.pids.pcr:
             self._chk_pcr(pkt, pid)
-        if self._pusi_flag(pkt):
-            self._chk_pts(pkt, pid)
+            if self._pusi_flag(pkt):
+                self._chk_pts(pkt, pid)
         return self._chk_scte35(pkt, pid)
 
     def _pid_has_scte35(self, pid):
@@ -679,8 +679,8 @@ class Stream:
         """
         # 5 bytes for stream_type info
         chunk_size = 5
-        end_idx = (idx + si_len) -4
-        while idx < end_idx:
+        end_idx = (idx + si_len) -chunk_size
+        while  end_idx > idx:
             stream_type, pid, ei_len = self._parse_stream_type(pay, idx)
             pinfo = self.maps.prgm[program_number]
             pinfo.streams[pid] = stream_type
