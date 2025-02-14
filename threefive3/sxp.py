@@ -8,15 +8,26 @@ from xml.sax.saxutils import unescape
 from .xml import strip_ns, iter_attrs
 
 
-class SuperXmlParser:
-
-    CHILD_NODES = [
+CHILD_NODES = [
         "Program",
         "SpliceTime",
         "DeliveryRestrictions",
         "SegmentationUpid",
         "BreakDuration",
     ]
+
+class SuperXmlParser:
+    """
+    The Super Xml Parser
+    """
+    def __init__(self,child_nodes=CHILD_NODES):
+        """
+        __init__  allows you to specify child nodes
+        
+        My thinking was, since I know which ones are
+        child nodes, why  not specify them?
+        """
+        self.child_nodes=child_nodes
 
     def _split_attrs(self, node):
         node = node.replace("='", '="').replace("' ", '" ')
@@ -74,7 +85,7 @@ class SuperXmlParser:
         for sp in splitted:
             if self._vrfy_sp(sp):
                 x = self._assemble(sp)
-                if x["name"] in self.CHILD_NODES:
+                if x["name"] in self.child_nodes:
                     results[-1]["children"].append(x)
                 else:
                     results.append(x)
