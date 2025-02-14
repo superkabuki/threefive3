@@ -418,15 +418,6 @@ class Stream:
         parse pts and store by program key
         in the dict Stream._pid_pts
         """
-        ##        payload = self._parse_payload(pkt)
-        ##        if len(payload) > 13:
-        ##            if self._pts_flag(payload):
-        ##                pts = (payload[9] & 14) << 29
-        ##                pts |= payload[10] << 22
-        ##                pts |= (payload[11] >> 1) << 15
-        ##                pts |= payload[12] << 7
-        ##                pts |= payload[13] >> 1
-
         pts = self.iframer.ticks(pkt)
         if pts:
             prgm = self.pid2prgm(pid)
@@ -463,11 +454,7 @@ class Stream:
         if pid == self.pids.PAT_PID:
             self._parse_pat(pay)
 
-    def _sdt_pid(
-        self,
-        pay,
-        pid,
-    ):
+    def _sdt_pid(self,pay,pid):
         if pid == self.pids.SDT_PID:
             self._parse_sdt(pay)
 
@@ -479,10 +466,7 @@ class Stream:
         """
         pay = self._parse_payload(pkt)
         if not self._same_as_last(pay, pid):
-            self._pmt_pid(
-                pay,
-                pid,
-            )
+            self._pmt_pid(pay,pid)
             self._pat_pid(pay, pid)
             self._sdt_pid(pay, pid)
 
@@ -533,7 +517,7 @@ class Stream:
         if pid in self.maps.last:
             last = self.maps.last[pid]
         self.maps.last[pid] = pay
-        return pay == last
+        return last
 
     def _section_incomplete(self, pay, pid, seclen):
         # + 3 for the bytes before section starts
