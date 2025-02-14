@@ -502,10 +502,10 @@ class Stream:
         return self._chk_scte35(pkt, pid)
 
     def _pid_has_scte35(self, pid):
-        #  return pid in self.pids.scte35.union(self.pids.maybe_scte35) #   union sucks. 4.47 secs
-        # return (pid in self.pids.scte35 or pid in self.pids.maybe_scte35) # 3.37 secs
-        return pid in (self.pids.scte35 or self.pids.maybe_scte35)  # 3.326 secs
-        # return pid in (self.pids.scte35|self.pids.maybe_scte35)  # wtf? 4.128  secs
+        #  return pid in self.pids.scte35.union(self.pids.maybe_scte35) # 4  Slowest. (union sucks)
+        # return (pid in self.pids.scte35 or pid in self.pids.maybe_scte35)  #2 Fast
+        return pid in (self.pids.scte35 or self.pids.maybe_scte35)  # 1 Fastest
+        # return pid in (self.pids.scte35|self.pids.maybe_scte35)  #3 Slow.  (I thought this would be fastest)
 
     def _chk_partial(self, pay, pid, sep):
         if pid in self.maps.partial:
