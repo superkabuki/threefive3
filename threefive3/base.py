@@ -27,7 +27,7 @@ class SCTE35Base:
         return nbin
 
     def _err2(self, var_name, var_value, bit_count, var_type):
-        err_mesg = f"\033[1;41m !! \033[0m \033[1;41m {var_name}\033[0m is \033[1;41m {var_value} \033[0m, it should be type {var_type} of {bit_count} bit(s)\n "
+        err_mesg = f"\033[1;41m !! \033[0m \033[1;41m {var_name}\033[0m is \033[1;41m {var_value} \033[0m, it should be type {var_type}, {bit_count} bit(s) long.\n "
         print2(err_mesg)
 
     def _bool_int(self, var_name, var_value, bit_count, var_type):
@@ -149,7 +149,7 @@ class SCTE35Base:
             if isinstance(val, (bytes, bytearray)):
                 val = list(val)
             return val
-        
+
         return {k: b2l(v) for k, v in vars(self).items() if v is not None}
 
     def _json2dict(self, gonzo):
@@ -158,7 +158,7 @@ class SCTE35Base:
         return gonzo
 
     def _chk_vars(self, k, v):
-        if k in  vars(self):
+        if k in vars(self):
             self.__dict__[k] = v
 
     def _vrfy_load(self, gonzo):
