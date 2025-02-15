@@ -225,6 +225,7 @@ def chk_mpegts_map():
     for key in m_keys:
         if key in sys.argv:
             for arg in args:
+                print2(arg)
                 mpegts_map[key](arg)
             sys.exit()
 
@@ -320,7 +321,7 @@ def to_funk(this):
         try:
             cue = Cue(this)
         except:
-            print2("Bad Data")
+            print2(f"Bad Data:\n{this}")
             sys.exit()
     if cue:
         funk()(cue)  #   func works here too.
@@ -342,7 +343,7 @@ def chk_stdin(args):
             strm = Stream(sys.stdin.buffer)
             strm._parse(one + two)  # dont drop first packet
             strm.decode(func=funk())
-            sys.exit()  # I keep forgetting why I do
+            sys.exit() # I keep forgetting why I do
     return args
 
 
