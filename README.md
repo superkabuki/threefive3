@@ -10,7 +10,10 @@
 * Built-in network support for http(s), UDP, and Multicast.
 * Automatic AES decryption for HLS.
 * All HLS SCTE-35 Tags are Supported
-* Using the library, MPEGTS streams can be parsed for SCTE-35 with three lines of code.
+___
+
+## MPEGTS streams can be parsed for SCTE-35 with three lines of code.
+
 ```py3
 a@fu:~/build5/scte35/scte35$ pypy3
 Python 3.9.16 (7.3.11+dfsg-2+deb12u3, Dec 30 2024, 22:36:23)
@@ -23,8 +26,8 @@ Type "help", "copyright", "credits" or "license" for more information.
 
 >>>> strm.decode()
 ```
-<br>
-<br>
+
+___
 
 
 # `Install`
