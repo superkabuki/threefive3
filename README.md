@@ -1,32 +1,31 @@
 [Install](#install) |[SCTE-35 Cli](#the-cli-tool) |[SCTE-35 Xml ](https://github.com/superkabuki/threefive3/blob/main/xml.md) | [Cue Class](https://github.com/superkabuki/threefive3/blob/main/cue.md) | [Stream Class](https://github.com/superkabuki/threefive3/blob/main/stream.md) | [Online SCTE-35 Parser](https://iodisco.com/scte35) | [Encode SCTE-35](https://github.com/superkabuki/threefive3/blob/main/encode.md) [FFmpeg SCTE35](https://github.com/superkabuki/FFmpeg_SCTE35)
 
 
-# threefive3
-* SCTE-35 Parser  ✅
-* SCTE-35 Encoder ✅
-* SCTE-35 HLS     ✅
-* SCTE-35 Xml     ✅
-* SCTE-35 Cli     ✅
-* SCTE-35 library ✅
-<br>
-<br>
+# threefive3 SCTE-35 cli tool and python3 library.
 
-# FAQ
-* Q. What is the latest version?
+✅ SCTE-35 Parser  ✅ SCTE-35 Encoder    ✅ SCTE-35 HLS     ✅ SCTE-35 Xml     ✅ SCTE-35 Cli     ✅  SCTE-35 library
 
-* A.  `v3.0.13`
----
-* Q. How do I upgrade my code from threefive to the __more powerful super advanced threefive3?__
 
-* A. `sed.`
-```js
-sed -i 's/threefive/threefive3/g'
+* Parses SCTE-35 from MPEGTS, HLS, XML, XML+Binary, Base64, Bytes, Hex, and Integers.
+* Built-in network support for http(s), UDP, and Multicast.
+* Automatic AES decryption for HLS.
+* All HLS SCTE-35 Tags are Supported
+* Using the library, MPEGTS streams can be parsed for SCTE-35 with three lines of code.
+```py3
+a@fu:~/build5/scte35/scte35$ pypy3
+Python 3.9.16 (7.3.11+dfsg-2+deb12u3, Dec 30 2024, 22:36:23)
+[PyPy 7.3.11 with GCC 12.2.0] on linux
+Type "help", "copyright", "credits" or "license" for more information.
+
+>>>> from threefive import Stream
+
+>>>> strm=Stream('https://futzu.com/xaa.ts')
+
+>>>> strm.decode()
 ```
----
-* Q. Does threefive3 have super cool new features?
+<br>
+<br>
 
-* A. `Yes.`
----
 
 # `Install`
 * python3 via pip
@@ -46,7 +45,7 @@ make install
 ___
 
 # `The Cli tool`
-> The cli polls stdin and that allows it to autodetect the SCTE-35 format as well as MPEGTS steams. Now every SCTE-35 data format, except hls, is autodetected on the commandline, as well as stdin.<br>HLS requires the `hls` ketyword.
+
 
 ### The cli tool installs automatically with pip or the Makefile.
 
@@ -64,6 +63,28 @@ ___
 * __stdin__ is __auto selected__ and __auto detected.__
 * __SCTE-35 data is printed to stderr__
 * __stdout is used when piping video__
+* mpegts can be specified by file name or URI.
+```rebol
+threefive3 udp://@235.2.5.35:3535
+```
+* If a file comtains a SCTE-35 Cue as a string( base64,hex,int,json,xml or xml+bin), redirect the file contents.
+```rebol
+
+  threefive3 < json.json  
+
+  threefive3 < xml.xml
+
+  cat xml.xml | threefive3
+ ```
+
+* quoted strings(( base64,hex,int,json,xml or xml+bin), can be passed directly on the command line as well.
+
+```awk
+
+threefive3 '/DAWAAAAAAAAAP/wBQb+ztd7owAAdIbbmw=='
+
+```
+
 
 | Input Type |     Cli Example                                                                                             |
 |------------|-------------------------------------------------------------------------------------------------------------|
