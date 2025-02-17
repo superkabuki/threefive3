@@ -17,6 +17,9 @@ class SCTE35Base:
 
     ROLLOVER = 8589934591
 
+    def __init__(self):
+        self.errors=[]
+
     def __repr__(self):
         return str(self.__dict__)
 
@@ -27,8 +30,9 @@ class SCTE35Base:
         return nbin
 
     def _err2(self, var_name, var_value, bit_count, var_type):
-        err_mesg = f"\033[1;41m !! \033[0m \033[1;41m {var_name}\033[0m is \033[1;41m {var_value} \033[0m, it should be type {var_type}, {bit_count} bit(s) long.\n "
-        print2(err_mesg)
+        var_type = str(var_type).split("'")[1]
+        err_mesg = f'{var_name} is {var_value} , it should be type {var_type}, {bit_count} bit(s) long.'
+        self.errors.append(err_mesg)
 
     def _bool_int(self, var_name, var_value, bit_count, var_type):
         if var_type == int:
@@ -104,14 +108,6 @@ class SCTE35Base:
         """
         if hasattr(self, what):
             return vars(self)[what]
-        return False
-
-    def hasis(self, what):
-        """
-        hasis  obj "has" a what and what "is" returned.
-        """
-        if self.has(what):
-            return vars(self)[what]
         return None
 
     @staticmethod
@@ -150,7 +146,7 @@ class SCTE35Base:
                 val = list(val)
             return val
 
-        return {k: b2l(v) for k, v in vars(self).items() if v is not None}
+        return {k: b2l(v) for k, v in vars(self).items() if v not in [None,[],] } # added empty list []
 
     def _json2dict(self, gonzo):
         if isinstance(gonzo, str):
