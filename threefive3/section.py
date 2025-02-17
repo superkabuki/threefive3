@@ -4,7 +4,7 @@ section.py
 SCTE35 Splice Info Section
 """
 
-from .bitn import BitBin
+from .bitn import Bitn
 from .base import SCTE35Base
 from .xml import Node
 
@@ -47,7 +47,7 @@ class SpliceInfoSection(SCTE35Base):
         """
         InfoSection.decode
         """
-        bitbin = BitBin(bites)
+        bitbin = Bitn(bites)
         self.table_id = bitbin.as_hex(8)
         if self.table_id != "0xfc":
             raise ValueError(
