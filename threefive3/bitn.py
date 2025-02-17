@@ -1,11 +1,11 @@
 """
-The bitn.BitBin and bitn.NBin classes
+The bitn.Bitn and bitn.NBin classes
 """
 
 from .spare import print2
 
 
-class BitBin:
+class Bitn:
     """
     bitn.Bitbin takes a byte string and
     converts it to a integer, a very large integer
@@ -19,7 +19,7 @@ class BitBin:
         self.bits = int.from_bytes(bites, byteorder="big")
 
     def __repr__(self):
-      return str(vars(self))
+        return str(vars(self))
 
     def as_90k(self, num_bits):
         """
@@ -96,7 +96,7 @@ class BitBin:
 class NBin:
     """
     bitn.NBin is
-    the reverse BitBin.
+    the reverse Bitn.
     Encodes data to integers
     and then bytes
     """
