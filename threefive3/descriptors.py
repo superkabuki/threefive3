@@ -2,7 +2,7 @@
 SCTE35 Splice Descriptors
 """
 
-from .bitn import BitBin
+from .bitn import Bitn
 from .base import SCTE35Base
 from .segmentation import table20, table22, dvb_table2
 from .upids import upid_map
@@ -110,7 +110,7 @@ class DVBDASDescriptor(SpliceDescriptor):
         """
         Decode DVB DAS Descriptor
         """
-        bitbin = BitBin(self.bites)
+        bitbin = Bitn(self.bites)
         self.break_num = bitbin.as_int(8)
         self.breaks_expected = bitbin.as_int(8)
         bitbin.forward(4)
@@ -152,7 +152,7 @@ class AvailDescriptor(SpliceDescriptor):
         """
         decode SCTE35 Avail Descriptor
         """
-        bitbin = BitBin(self.bites)
+        bitbin = Bitn(self.bites)
         self.provider_avail_id = bitbin.as_int(32)
 
     def encode(self, nbin=None):
@@ -251,7 +251,7 @@ class TimeDescriptor(SpliceDescriptor):
         """
         decode SCTE35 Time Descriptor
         """
-        bitbin = BitBin(self.bites)
+        bitbin = Bitn(self.bites)
         self.tai_seconds = bitbin.as_int(48)
         self.tai_ns = bitbin.as_int(32)
         self.utc_offset = bitbin.as_int(16)
@@ -328,7 +328,7 @@ class SegmentationDescriptor(SpliceDescriptor):
         """
         decode a segmentation descriptor
         """
-        bitbin = BitBin(self.bites)
+        bitbin = Bitn(self.bites)
         self.segmentation_event_id = bitbin.as_hex(32)
         self.segmentation_event_cancel_indicator = bitbin.as_flag(1)
         self.segmentation_event_id_compliance_indicator = bitbin.as_flag(1)
@@ -527,7 +527,7 @@ class SegmentationDescriptor(SpliceDescriptor):
                 bites = bytes.fromhex(seg_upid)
             except ValueError:
                 bites = seg_upid.encode()
-            bitbin = BitBin(bites)
+            bitbin = Bitn(bites)
             self.segmentation_upid_length = len(bites)
             the_upid = self.mk_the_upid(bitbin=bitbin)
             self.segmentation_upid_type_name, self.segmentation_upid = the_upid.decode()
