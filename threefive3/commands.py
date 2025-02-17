@@ -2,7 +2,7 @@
 SCTE35 Splice Commands
 """
 
-from .bitn import BitBin
+from .bitn import Bitn
 from .base import SCTE35Base
 from .xml import Node
 
@@ -131,7 +131,7 @@ class TimeSignal(SpliceCommand):
         """
         TimeSignal.decode method
         """
-        bitbin = BitBin(self.bites)
+        bitbin = Bitn(self.bites)
         start = bitbin.idx
         self._splice_time(bitbin)
         self._set_len(start, bitbin.idx)
@@ -225,7 +225,7 @@ class SpliceInsert(TimeSignal):
         """
         decode SpliceInsert
         """
-        bitbin = BitBin(self.bites)
+        bitbin = Bitn(self.bites)
         start = bitbin.idx
         self.splice_event_id = bitbin.as_int(32)
         self.splice_event_cancel_indicator = bitbin.as_flag(1)
