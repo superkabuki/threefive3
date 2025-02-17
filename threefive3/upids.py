@@ -5,7 +5,7 @@ classy Upids
 
 """
 
-from .bitn import BitBin, NBin
+from .bitn import Bitn, NBin
 from .xml import Node
 
 charset = "ascii"  #  pylint, this isn't a constant.
@@ -49,9 +49,9 @@ class Upid:
         """
         if isinstance(seg_upid, str):
             try:
-                self.bitbin = BitBin(bytes.fromhex(seg_upid))
+                self.bitbin = Bitn(bytes.fromhex(seg_upid))
             except ValueError:
-                self.bitbin = BitBin(seg_upid.encode())
+                self.bitbin = Bitn(seg_upid.encode())
             return self.decode()
         self.upid_value = seg_upid
         return self.upid_name, self.upid_value
@@ -381,7 +381,7 @@ class Umid(Upid):
 # segmentation_upid_type : [name, class, length]
 upid_map = {
     0x00: ["No UPID", NoUpid, 0],
-    0x01: ["Type 0x01 is deprecated. Use MPU, type 0x0C, .",Upid,False],
+    0x01: ["Type 0x01 is deprecated. Use MPU, type 0x0C, .", Upid, False],
     0x02: ["Type 0x02 is deprecated. Use AdID, type 0x03 .", Upid, 8],
     0x03: ["AdID", Upid, 12],
     0x04: ["UMID", Umid, 32],
