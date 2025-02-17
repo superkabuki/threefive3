@@ -13,6 +13,7 @@ class SpliceCommand(SCTE35Base):
     """
 
     def __init__(self, bites=None):
+        super().__init__()
         self.command_length = 0
         self.command_type = None
         self.name = None
