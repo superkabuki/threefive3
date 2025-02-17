@@ -25,7 +25,7 @@ class SpliceDescriptor(SCTE35Base):
     """
 
     def __init__(self, bites=None):
-
+        super().__init__()
         self.tag = None
         self.identifier = "CUEI"
         self.name = None
@@ -421,6 +421,7 @@ class SegmentationDescriptor(SpliceDescriptor):
         """
         upid_type = self.segmentation_upid_type
         if upid_type not in upid_map:
+            self.errors.append("Unknown upid type , setting to 0xFD")
             upid_type = 0xFD
         the_upid = upid_map[upid_type][1](
             bitbin, upid_type, self.segmentation_upid_length
@@ -435,6 +436,7 @@ class SegmentationDescriptor(SpliceDescriptor):
         upid_type = self.segmentation_upid_type
         if upid_type not in upid_map:
             upid_type = 0xFD
+            self.errors.append("Unknown upid type , setting to 0xFD")
         the_upid = upid_map[upid_type][1](
             None, upid_type, self.segmentation_upid_length
         )
@@ -459,6 +461,7 @@ class SegmentationDescriptor(SpliceDescriptor):
                 self._chk_var(int, nbin.add_int, "sub_segment_num", 8)
                 self._chk_var(int, nbin.add_int, "sub_segments_expected", 8)
             except:
+                self.errors.append("Adding sub_segment_num and sub_segments_expected. setting to 0, 0")
                 nbin.add_int(0, 8)
                 nbin.add_int(0, 8)
 
@@ -550,5 +553,6 @@ def splice_descriptor(bites):
         spliced = descriptor_map[tag](bites)
     else:
         spliced = SpliceDescriptor(bites)
+        spliced.errors.append(f"tag not in descriptor map. 0,1,2,3, 240 are valid tags")
     spliced.decode()
     return spliced
