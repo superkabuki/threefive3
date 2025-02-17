@@ -8,7 +8,7 @@ from .spare import print2
 from .bitn import NBin
 from .base import SCTE35Base
 from .section import SpliceInfoSection
-from .commands import command_map
+from .commands import command_map, SpliceCommand
 from .descriptors import splice_descriptor, descriptor_map
 from .crc import crc32
 from .xml import Node
@@ -47,18 +47,33 @@ class Cue(SCTE35Base):
         data may be packet bites or encoded string
         packet_data is a instance passed from a Stream instance
         """
+        self.errors=[]
         self.command = None
         self.descriptors = []
         self.info_section = SpliceInfoSection()
         self.bites = None
         if data:
             self.bites = self._mk_bits(data)
+            self.decode()
         self.packet_data = packet_data
         self.dash_data = None
+        self.decode()
 
     def __repr__(self):
         return str(self.__dict__)
 
+    def errs(self):
+        """
+        errs  show encoding errors.
+        """         
+        e= {"cue.errors": self.errors}
+        if self.info_section:
+           e["info_section_errors"] = self.info_section.has("errors")
+        if isinstance(self.command,  SpliceCommand):
+            e["command_errors"]= self.command.errors
+        e["descriptor_errors"] = [d.errors for d in self.descriptors]
+        return e
+    
     def decode(self):
         """
         Cue.decode() parses for SCTE35 data
@@ -116,6 +131,7 @@ class Cue(SCTE35Base):
             scte35_data = self._get_dash_data(scte35_data)
             scte35_data = self._get_packet_data(scte35_data)
             return scte35_data
+        self.errors.append("command or info section not found")
         return False
 
     def get_descriptors(self):
@@ -131,11 +147,12 @@ class Cue(SCTE35Base):
         """
         return self.bites
 
-    @staticmethod
-    def fix_bad_b64(data):
+    def fix_bad_b64(self,data):
         """
         fix_bad_b64 fixes bad padding on Base64
         """
+        if len(data) %4!=0:
+            self.errors.append('fixed bad base64 length ')
         while len(data) % 4 != 0:
             data = data + "="
         return data
@@ -238,12 +255,12 @@ class Cue(SCTE35Base):
         """
         sct = self.info_section.splice_command_type
         if sct not in command_map:
+            self.errors.append(f"Splice Command type {sct} not recognized") 
             return False
         iscl = self.info_section.splice_command_length
         cmd_bites = bites[:iscl]
         self.command = command_map[sct](cmd_bites)
         self.command.command_length = iscl
-
         self.command.decode()
         del self.command.bites
         return bites[iscl:]
@@ -251,9 +268,13 @@ class Cue(SCTE35Base):
     # encode related
 
     def _assemble(self):
+        for d in self.descriptors:
+            d.errors=[]
         dscptr_bites = self._unloop_descriptors()
         dll = len(dscptr_bites)
         self.info_section.descriptor_loop_length = dll
+        self.info_section.errors=[]
+        self.command.errors=[]
         cmd_bites = self.command.encode()
         cmdl = self.command.command_length = len(cmd_bites)
         self.info_section.splice_command_length = cmdl
@@ -277,6 +298,7 @@ class Cue(SCTE35Base):
             self._assemble()
             self._encode_crc()
             return b64encode(self.bites).decode()
+        self._no_cmd()
         return False
 
     def encode(self):
@@ -366,7 +388,8 @@ class Cue(SCTE35Base):
         """
         _no_cmd raises an exception if no splice command.
         """
-        raise Exception("\033[7mA splice command is required\033[27m")
+        self.errors.append("A splice command is required")
+      #  raise Exception("\033[7mA splice command is required\033[27m")
 
     def load(self, gonzo):
         """
@@ -424,9 +447,12 @@ class Cue(SCTE35Base):
         _mk_descriptor_xml make xml nodes for descriptors.
         """
         for d in self.descriptors:
-            if d.has("segmentation_type_id") and d.segmentation_type_id in table22:
-                comment = f"{table22[d.segmentation_type_id]}"
-                sis.add_comment(comment)
+            if d.has("segmentation_type_id"):
+                if d.segmentation_type_id in table22:
+                    comment = f"{table22[d.segmentation_type_id]}"
+                    sis.add_comment(comment)
+                else:
+                    d.errors.append("Segmentation type id not in table 22")
             sis.add_child(d.xml(ns=ns))
         return sis
 
