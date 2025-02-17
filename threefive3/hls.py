@@ -153,9 +153,9 @@ class Scte35Profile:
 
     @staticmethod
     def _clean(line):
-        '''
+        """
         remove whitespace and quotes
-        '''
+        """
         translate_map = {34: 94, 10: 94, 9: 94, 32: 94, 39: 94}
         return line.translate(translate_map).replace("^", "")
 
@@ -230,7 +230,7 @@ class Scte35Profile:
 
     def _chk_pts(self, cue):
         pts = None
-        if cue.command.hasis("pts_time"):
+        if cue.command.has("pts_time"):
             pts = self.set_pts(cue)
         return pts
 
@@ -265,7 +265,7 @@ class Scte35Profile:
     def _is_splice_insert_cueout(self, cue):
         line = None
         if cue.command.out_of_network_indicator:
-            if cue.command.hasis("break_duration"):
+            if cue.command.has("break_duration"):
                 duration = cue.command.break_duration
                 line = f"#EXT-X-CUE-OUT:{duration}\n"
         return line
@@ -282,7 +282,7 @@ class Scte35Profile:
     def _is_dscptr_cueout(self, dscptr, line):
         if dscptr.segmentation_type_id in self.starts:
             self.seg_type = dscptr.segmentation_type_id + 1
-            if dscptr.hasis("segmentation_duration"):
+            if dscptr.has("segmentation_duration"):
                 duration = dscptr.segmentation_duration
                 line = f"#EXT-X-CUE-OUT:{duration}\n"
         return line
@@ -808,7 +808,7 @@ class CuePuller:
         found in a segment.
         """
         for cue in seg.cues:
-            if cue.hasis("packet_data"):
+            if cue.has("packet_data"):
                 self.pts = cue.packet_data.pts
             if cue.encode() != self.last_cue:
                 self.last_cue = cue.encode()
