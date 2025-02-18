@@ -1,6 +1,3 @@
-[Install](#install) |[SCTE-35 Cli](#the-cli-tool) |[SCTE-35 Xml ](https://github.com/superkabuki/threefive3/blob/main/xml.md) | [Cue Class](https://github.com/superkabuki/threefive3/blob/main/cue.md) | [Stream Class](https://github.com/superkabuki/threefive3/blob/main/stream.md) | [Online SCTE-35 Parser](https://iodisco.com/scte35) | [Encode SCTE-35](https://github.com/superkabuki/threefive3/blob/main/encode.md) [FFmpeg SCTE35](https://github.com/superkabuki/FFmpeg_SCTE35)
-
-
 # threefive3 SCTE-35 cli tool and python3 library.
 
 ✅ SCTE-35 Parser  ✅ SCTE-35 Encoder    ✅ SCTE-35 HLS     ✅ SCTE-35 Xml     ✅ SCTE-35 Cli     ✅  SCTE-35 library
@@ -11,6 +8,14 @@
 * Automatic AES decryption for HLS.
 * All HLS SCTE-35 Tags are Supported
 ___
+* [Install](#install) 
+* [SCTE-35 Cli](#the-cli-tool)
+* [SCTE-35 Xml ](https://github.com/superkabuki/threefive3/blob/main/xml.md)
+* [Cue Class](https://github.com/superkabuki/threefive3/blob/main/cue.md)
+* [Stream Class](https://github.com/superkabuki/threefive3/blob/main/stream.md)
+* [Online SCTE-35 Parser](https://iodisco.com/scte35)
+* [Encode SCTE-35](https://github.com/superkabuki/threefive3/blob/main/encode.md)
+* [FFmpeg SCTE35](https://github.com/superkabuki/FFmpeg_SCTE35)
 
 ## MPEGTS streams can be parsed for SCTE-35 with three lines of code.
 
@@ -46,6 +51,7 @@ cd scte35
 make install
 ```
 ___
+
 
 # `The Cli tool`
 
