@@ -47,7 +47,7 @@ pypy3 -mpip install threefive3
 * from the git repo
 ```rebol
 git clone https://github.com/superkabuki/scte35.git
-cd scte35
+cd threefive3
 make install
 ```
 ___
