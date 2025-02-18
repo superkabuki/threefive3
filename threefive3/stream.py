@@ -161,6 +161,8 @@ class Stream:
         self.pids = Pids()
         self.maps = Maps()
         self.iframer = IFramer(shush=True)
+        self.pmt_payloads=set()
+        self.pmt_count=0
 
     def __repr__(self):
         return str(self.__dict__)
@@ -316,13 +318,14 @@ class Stream:
         self.info = True
         for pkt in self.iter_pkts():
             self._parse(pkt)
-        if self.maps.prgm.keys():
-            sopro = sorted(self.maps.prgm.items())
-            for k, vee in sopro:
+            if self.pmt_count > 20:
+                if self.maps.prgm.keys():
+                    sopro = sorted(self.maps.prgm.items())
+                    for k, vee in sopro:
                 #  if len(vee.streams.items()) > 0:
-                print2(f"\nProgram: {k}")
-                vee.show()
-        return True
+                        print2(f"\nProgram: {k}")
+                        vee.show()
+                        return True
 
     def show_pts(self):
         """
@@ -448,6 +451,11 @@ class Stream:
 
     def _pmt_pid(self, pay, pid):
         if pid in self.pids.pmt:
+            self.pmt_payloads.add(pay)
+            self.pmt_count+=1
+            if self.pmt_count > 10:
+                if pay in self.pmt_payloads:
+                    return
             self._parse_pmt(pay, pid)
 
     def _pat_pid(self, pay, pid):
@@ -465,8 +473,8 @@ class Stream:
         based on pid of the pkt
         """
         pay = self._parse_payload(pkt)
+        self._pmt_pid(pay,pid)
         if not self._same_as_last(pay, pid):
-            self._pmt_pid(pay,pid)
             self._pat_pid(pay, pid)
             self._sdt_pid(pay, pid)
 
@@ -496,16 +504,16 @@ class Stream:
 
     def _parse(self, pkt):
         pid = self._parse_info(pkt)
-        if pid in self.pids.pcr:
-            self._chk_pcr(pkt, pid)
+     #   if pid in self.pids.pcr:
+       #     self._chk_pcr(pkt, pid)
         self._chk_pts(pkt, pid)
         return self._chk_scte35(pkt, pid)
 
     def _pid_has_scte35(self, pid):
-        #  return pid in self.pids.scte35.union(self.pids.maybe_scte35) # 4  Slowest. (union sucks)
-        # return (pid in self.pids.scte35 or pid in self.pids.maybe_scte35)  #2 Fast
-        return pid in (self.pids.scte35 or self.pids.maybe_scte35)  # 1 Fastest
-        # return pid in (self.pids.scte35|self.pids.maybe_scte35)  #3 Slow.  (I thought this would be fastest)
+        #  return pid in self.pids.scte35.union(self.pids.maybe_scte35) #   union sucks. 4.47 secs
+        # return (pid in self.pids.scte35 or pid in self.pids.maybe_scte35) # 3.37 secs
+        return pid in (self.pids.scte35 or self.pids.maybe_scte35)  # 3.326 secs
+        # return pid in (self.pids.scte35|self.pids.maybe_scte35)  # wtf? 4.128  secs
 
     def _chk_partial(self, pay, pid, sep):
         if pid in self.maps.partial:
