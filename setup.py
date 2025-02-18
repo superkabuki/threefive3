@@ -18,7 +18,6 @@ setuptools.setup(
     long_description_content_type="text/markdown",
     url="https://github.com/superkabuki/scte35",
     install_requires=[
-        'm3ufu >= 0.0.89',
         "pyaes",
     ],
 
