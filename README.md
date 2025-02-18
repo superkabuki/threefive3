@@ -25,7 +25,7 @@ Python 3.9.16 (7.3.11+dfsg-2+deb12u3, Dec 30 2024, 22:36:23)
 [PyPy 7.3.11 with GCC 12.2.0] on linux
 Type "help", "copyright", "credits" or "license" for more information.
 
->>>> from threefive import Stream
+>>>> from threefive3 import Stream
 
 >>>> strm=Stream('https://futzu.com/xaa.ts')
 
