@@ -10,7 +10,7 @@ import os
 import sys
 import time
 from collections import deque
-from m3ufu import M3uFu, TagParser, HEADER_TAGS
+from .m3ufu import M3uFu, TagParser, HEADER_TAGS
 from .segment import Segment
 from .cue import Cue
 from .new_reader import reader
