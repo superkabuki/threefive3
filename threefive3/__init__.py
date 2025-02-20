@@ -2,12 +2,12 @@
 scte35.__init__.py
 """
 
-from .spare import print2
 
 from .cue import Cue
 from .section import SpliceInfoSection
 from .segment import Segment
 from .stream import Stream
+from .stuff import print2
 from .version import version
 
 from .commands import (
@@ -29,10 +29,9 @@ from .descriptors import (
     SpliceDescriptor,
     TimeDescriptor,
     descriptor_map,
-
 )
 
-from .upids import(
+from .upids import (
     Upid,
     NoUpid,
     AirId,
@@ -43,4 +42,4 @@ from .upids import(
     Mpu,
     Umid,
     upid_map,
- )   
+)
