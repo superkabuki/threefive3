@@ -6,7 +6,7 @@ import sys
 
 from functools import partial
 from .new_reader import reader
-from .spare import print2
+from .stuff import print2
 from .cue import Cue
 from .packetdata import PacketData
 from .streamtypes import streamtype_map
@@ -387,7 +387,7 @@ class Stream:
             return b""
         while bites[0] == pad:
             bites = bites[1:]
-        return self._unpad2(bites)
+        return bites
 
     def _unpad2(self, bites):
         pad = 255
@@ -448,10 +448,9 @@ class Stream:
         if pid in self.pids.pmt:
             self.pmt_count += 1
             if pay in self.pmt_payloads:
-                if self.pmt_count > 10:
+                if self.pmt_count > 3:
                     return
-            else:
-                self.pmt_payloads.add(pay)
+            self.pmt_payloads.add(pay)
             self._parse_pmt(pay, pid)
 
     def _pat_pid(self, pay, pid):
@@ -500,9 +499,9 @@ class Stream:
 
     def _parse(self, pkt):
         pid = self._parse_info(pkt)
-        if pid in self.pids.pcr:
-            self._chk_pcr(pkt, pid)
-            self._chk_pts(pkt, pid)
+       # if pid in self.pids.pcr:
+        #    self._chk_pcr(pkt, pid)
+        self._chk_pts(pkt, pid)
         return self._chk_scte35(pkt, pid)
 
     def _pid_has_scte35(self, pid):
