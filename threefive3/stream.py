@@ -161,8 +161,8 @@ class Stream:
         self.pids = Pids()
         self.maps = Maps()
         self.iframer = IFramer(shush=True)
-        self.pmt_payloads=set()
-        self.pmt_count=0
+        self.pmt_payloads = set()
+        self.pmt_count = 0
 
     def __repr__(self):
         return str(self.__dict__)
@@ -319,13 +319,14 @@ class Stream:
         for pkt in self.iter_pkts():
             self._parse(pkt)
             if self.pmt_count > 20:
-                if self.maps.prgm.keys():
-                    sopro = sorted(self.maps.prgm.items())
-                    for k, vee in sopro:
+                break
+        if self.maps.prgm.keys():
+            sopro = sorted(self.maps.prgm.items())
+            for k, vee in sopro:
                 #  if len(vee.streams.items()) > 0:
-                        print2(f"\nProgram: {k}")
-                        vee.show()
-                        return True
+                print2(f"\nProgram: {k}")
+                vee.show()
+                return True
 
     def show_pts(self):
         """
@@ -378,11 +379,6 @@ class Stream:
         if prgm in self.maps.prgm_pcr:
             return self.as_90k(self.maps.prgm_pcr[prgm])
         return False
-
-    def _unpad_afc(self, pkt):
-        if self._afc_flag(pkt[3]):
-            pkt = pkt[:4] + self._unpad(pkt[4:])
-        return pkt
 
     def _unpad(self, bites):
         pad = 255
@@ -444,25 +440,25 @@ class Stream:
         """
         head_size = 4
         if self._afc_flag(pkt[3]):
-            pkt = self._unpad_afc(pkt)
             afl = pkt[4]
             head_size += afl + 1  # +1 for afl byte
-        return pkt[head_size:]
+        return self._unpad(pkt[head_size:])
 
     def _pmt_pid(self, pay, pid):
         if pid in self.pids.pmt:
-            self.pmt_payloads.add(pay)
-            self.pmt_count+=1
-            if self.pmt_count > 10:
-                if pay in self.pmt_payloads:
+            self.pmt_count += 1
+            if pay in self.pmt_payloads:
+                if self.pmt_count > 10:
                     return
+            else:
+                self.pmt_payloads.add(pay)
             self._parse_pmt(pay, pid)
 
     def _pat_pid(self, pay, pid):
         if pid == self.pids.PAT_PID:
             self._parse_pat(pay)
 
-    def _sdt_pid(self,pay,pid):
+    def _sdt_pid(self, pay, pid):
         if pid == self.pids.SDT_PID:
             self._parse_sdt(pay)
 
@@ -473,7 +469,7 @@ class Stream:
         based on pid of the pkt
         """
         pay = self._parse_payload(pkt)
-        self._pmt_pid(pay,pid)
+        self._pmt_pid(pay, pid)
         if not self._same_as_last(pay, pid):
             self._pat_pid(pay, pid)
             self._sdt_pid(pay, pid)
@@ -504,9 +500,9 @@ class Stream:
 
     def _parse(self, pkt):
         pid = self._parse_info(pkt)
-     #   if pid in self.pids.pcr:
-       #     self._chk_pcr(pkt, pid)
-        self._chk_pts(pkt, pid)
+        if pid in self.pids.pcr:
+            self._chk_pcr(pkt, pid)
+            self._chk_pts(pkt, pid)
         return self._chk_scte35(pkt, pid)
 
     def _pid_has_scte35(self, pid):
