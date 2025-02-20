@@ -1,4 +1,12 @@
-### threefive3.Stream class
+# threefive3.Stream class
+## Methods
+* [\_\_init__](#)
+* [decode](#streamdecodeself-funcshow_cue)
+* [decode_next](#streamdecode_nextself)
+* [decode_pids](#streamdecode_pidsself-scte35_pids-funcshow_cue)
+* [proxy](#streamproxyself-funcshow_cue)
+* [show](#streamshowself)
+
 
 ```js
 
@@ -22,6 +30,13 @@ class Stream(builtins.object)
  |      strm.decode()
  |  
  |  
+```
+### Stream.__init__(self, tsdata, show_null=True)
+```js
+ __init__(self, tsdata, show_null=True)
+ |      tsdata is an file or http/https, or multicast, or UDP unicast URI.
+ |
+ |       set show_null=False to exclude Splice Nulls
 ```
 ### Stream.decode(self, func=show_cue)
  ```js
