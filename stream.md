@@ -1,12 +1,4 @@
 # threefive3.Stream class
-## Methods
-* [\_\_init__](#)
-* [decode](#streamdecodeself-funcshow_cue)
-* [decode_next](#streamdecode_nextself)
-* [decode_pids](#streamdecode_pidsself-scte35_pids-funcshow_cue)
-* [proxy](#streamproxyself-funcshow_cue)
-* [show](#streamshowself)
-
 
 ```js
 
@@ -31,14 +23,23 @@ class Stream(builtins.object)
  |  
  |  
 ```
-### Stream.__init__(self, tsdata, show_null=True)
+# Methods
+* [\_\_init__](#streaminitself-tsdata-show_nulltrue)
+* [decode](#streamdecodeself-funcshow_cue)
+* [decode_next](#streamdecode_nextself)
+* [decode_pids](#streamdecode_pidsself-scte35_pids-funcshow_cue)
+* [proxy](#streamproxyself-funcshow_cue)
+* [show](#streamshowself)
+
+
+## Stream.\_\_init__(self, tsdata, show_null=True)
 ```js
  __init__(self, tsdata, show_null=True)
  |      tsdata is an file or http/https, or multicast, or UDP unicast URI.
  |
  |       set show_null=False to exclude Splice Nulls
 ```
-### Stream.decode(self, func=show_cue)
+## Stream.decode(self, func=show_cue)
  ```js
  |  decode(self,func=show_cue)
  |      Stream.decode reads self.tsdata to find SCTE35 packets.
@@ -82,7 +83,7 @@ strm.decode(func=base64_out)
 /DAvAAAAAAAA///wFAUAAAAXf+/+eq+lcv4Ae5igAAEI/wAKAAhDVUVJAAAACEre6z4=
 /DAqAAAAAAAA///wDwVAAAT2f0/+ecF1mQABC/8ACgAIQ1VFSQAAAAsuZVlR
 ```
-### Stream.decode_next(self)
+## Stream.decode_next(self)
 
 ```py3
  |  decode_next(self)
@@ -90,7 +91,7 @@ strm.decode(func=base64_out)
  |      SCTE35 cue as a threefive3.Cue instance.
  |
 ```
-### Stream.decode_pids(self, scte35_pids=[], func=show_cue)
+## Stream.decode_pids(self, scte35_pids=[], func=show_cue)
 ```py3
  |  decode_pids(self, scte35_pids=[], func=show_cue)
  |      Stream.decode_pids takes a list of SCTE-35 Pids parse
@@ -98,7 +99,7 @@ strm.decode(func=base64_out)
  |      if scte35_pids is not set, all threefive3 pids will be parsed.
  |
 ```
-### Stream.proxy(self, func=show_cue)
+## Stream.proxy(self, func=show_cue)
 ```py3
  |  proxy(self, func=show_cue)
  |      Stream.decode_proxy writes all ts packets are written to stdout
@@ -106,7 +107,7 @@ strm.decode(func=base64_out)
  |      SCTE-35 cues are print2`ed to stderr.
  |
 ```
-### Stream.show(self)
+## Stream.show(self)
 ```py3
  |  show(self)
  |      displays streams that will be
