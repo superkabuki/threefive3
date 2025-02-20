@@ -6,7 +6,7 @@ import io
 import sys
 from .crc import crc32
 from .bitn import NBin
-from .spare import print2
+from .stuff import print2
 from .stream import Stream
 
 fixme = []
@@ -45,8 +45,8 @@ class SixFix(Stream):
 
     def __init__(self, tsdata=None):
         super().__init__(tsdata)
-        self.pmt_payloads = {}
-        self.pid_prog={}
+        self.pmt_pays = {}
+        self.pid_prog = {}
         self.con_pids = set()
         self.out_file = "sixfixed-" + tsdata.rsplit("/")[-1]
         self.in_file = sys.stdin.buffer
@@ -55,9 +55,9 @@ class SixFix(Stream):
         if pid in self.pids.tables:
             self._parse_tables(pkt, pid)
         if pid in self.pids.pmt:
-            prgm=self.pid2prgm(pid)
-            if prgm in self.pmt_payloads:
-                pkt = pkt[:4] + self.pmt_payloads[prgm]
+            prgm = self.pid2prgm(pid)
+            if prgm in self.pmt_pays:
+                pkt = pkt[:4] + self.pmt_pays[prgm]
         return pkt
 
     def _parse_pkts(self, out_file):
@@ -84,7 +84,9 @@ class SixFix(Stream):
         with open(self.out_file, "wb") as out_file:
             self._parse_pkts(out_file)
 
-    def _regen_pmt(self,prgm, n_seclen, pcr_pid, n_proginfolen, n_info_bites, n_streams):
+    def _regen_pmt(
+        self, prgm, n_seclen, pcr_pid, n_proginfolen, n_info_bites, n_streams
+    ):
         nbin = NBin()
         nbin.add_int(2, 8)  # 0x02
         nbin.add_int(1, 1)  # section Syntax indicator
@@ -106,11 +108,11 @@ class SixFix(Stream):
         a_crc = crc32(nbin.bites)
         nbin.add_int(a_crc, 32)
         pointer_field = b"\x00"
-        n_payload = pointer_field +nbin.bites
-        pad =184 -len(n_payload)
+        n_payload = pointer_field + nbin.bites
+        pad = 184 - len(n_payload)
         if pad > 0:
             n_payload = n_payload + (b"\xff" * pad)
-        self.pmt_payloads[prgm] = n_payload
+        self.pmt_pays[prgm] = n_payload
 
     def _chk_payload(self, pay, pid):
         pay = self._chk_partial(pay, pid, self._PMT_TID)
@@ -149,7 +151,9 @@ class SixFix(Stream):
         si_len = seclen - 9
         si_len -= proginfolen
         n_streams = self._parse_program_streams(si_len, pay, idx, program_number)
-        self._regen_pmt(program_number,n_seclen, pcr_pid, n_proginfolen, n_info_bites, n_streams)
+        self._regen_pmt(
+            program_number, n_seclen, pcr_pid, n_proginfolen, n_info_bites, n_streams
+        )
         return True
 
     def _parse_program_streams(self, si_len, pay, idx, program_number):
