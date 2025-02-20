@@ -461,7 +461,9 @@ class SegmentationDescriptor(SpliceDescriptor):
                 self._chk_var(int, nbin.add_int, "sub_segment_num", 8)
                 self._chk_var(int, nbin.add_int, "sub_segments_expected", 8)
             except:
-                self.errors.append("Adding sub_segment_num and sub_segments_expected. setting to 0, 0")
+                self.errors.append(
+                    "Adding sub_segment_num and sub_segments_expected. setting to 0, 0"
+                )
                 nbin.add_int(0, 8)
                 nbin.add_int(0, 8)
 
