@@ -10,7 +10,7 @@ import os
 import sys
 import time
 from collections import deque
-from .m3ufu import M3uFu, TagParser, HEADER_TAGS
+from .m3ufu import TagParser, HEADER_TAGS
 from .segment import Segment
 from .cue import Cue
 from .new_reader import reader
@@ -1054,34 +1054,29 @@ def precheck():
     _chk_profile()
 
 
-def _segments_to_playlist():
-    fumo = M3uFu()
-    fumo.m3u8 = sys.argv[1]
-    fumo.decode()
-    return [segment for segment in fumo.segments if "#EXT-X-STREAM-INF" in segment.tags]
-
-
-def _mk_playlist(renditions):
-    playlist = False
-    if renditions:
-        playlist = _segments_to_playlist()
-    return playlist
-
-
-def _mk_renditions(arg):
-    return [line for line in arg if b"#EXT-X-STREAM-INF" in line]
-
-
-def _parse_renditions(arg):
-    return _mk_playlist(_mk_renditions(arg))
+def pick_one(lines, uri):
+    """
+    pick_one  if lines come from a master.m3u8
+    find the first rendition and make a uri or return uri.
+    """
+    for line in lines:
+        if line.startswith(b"#EXT-X-STREAM-INF"):
+            idx = lines.index(line) + 1
+            line = lines[idx].decode("utf-8")
+            base_url = uri.rsplit("/", 1)[0]
+            uri = base_url + "/" + line
+            uri.replace("\n", "")
+    return uri
 
 
 def find_renditions():
     """
     find_renditions search master.m3u8 for playable renditions.
     """
-    with reader(sys.argv[1]) as arg:
-        return _parse_renditions(arg)
+    uri = sys.argv[1]
+    with reader(uri) as arg:
+        lines = arg.readlines()
+        return pick_one(lines, uri)
 
 
 def cli():
@@ -1098,17 +1093,11 @@ def cli():
 
      is all that's required.
     """
-    playlists = None
-    m3u8 = None
     precheck()
-    playlists = find_renditions()
-    if playlists:
-        m3u8 = playlists[0].media
-    else:
-        m3u8 = sys.argv[1]
-    cpulr = CuePuller()
-    cpulr.pull(m3u8)
-    print()
+    playlist = find_renditions()
+    if playlist:
+        cpulr = CuePuller()
+        cpulr.pull(playlist)
     sys.exit()
 
 
