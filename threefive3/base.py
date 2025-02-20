@@ -5,7 +5,7 @@ the class SCTE35Base.
 
 import json
 from .bitn import NBin
-from .spare import print2
+from .stuff import print2
 from .xml import Node
 
 
@@ -18,7 +18,7 @@ class SCTE35Base:
     ROLLOVER = 8589934591
 
     def __init__(self):
-        self.errors=[]
+        self.errors = []
 
     def __repr__(self):
         return str(self.__dict__)
@@ -31,7 +31,7 @@ class SCTE35Base:
 
     def _err2(self, var_name, var_value, bit_count, var_type):
         var_type = str(var_type).split("'")[1]
-        err_mesg = f'{var_name} is {var_value} , it should be type {var_type}, {bit_count} bit(s) long.'
+        err_mesg = f"{var_name} is {var_value} , it should be type {var_type}, {bit_count} bit(s) long."
         self.errors.append(err_mesg)
 
     def _bool_int(self, var_name, var_value, bit_count, var_type):
@@ -146,7 +146,15 @@ class SCTE35Base:
                 val = list(val)
             return val
 
-        return {k: b2l(v) for k, v in vars(self).items() if v not in [None,[],] } # added empty list []
+        return {
+            k: b2l(v)
+            for k, v in vars(self).items()
+            if v
+            not in [
+                None,
+                [],
+            ]
+        }  # added empty list []
 
     def _json2dict(self, gonzo):
         if isinstance(gonzo, str):
