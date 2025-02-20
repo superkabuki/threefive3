@@ -47,7 +47,7 @@ class Cue(SCTE35Base):
         data may be packet bites or encoded string
         packet_data is a instance passed from a Stream instance
         """
-        self.errors=[]
+        self.errors = []
         self.command = None
         self.descriptors = []
         self.info_section = SpliceInfoSection()
@@ -65,15 +65,15 @@ class Cue(SCTE35Base):
     def errs(self):
         """
         errs  show encoding errors.
-        """         
-        e= {"cue.errors": self.errors}
+        """
+        e = {"cue.errors": self.errors}
         if self.info_section:
-           e["info_section_errors"] = self.info_section.has("errors")
-        if isinstance(self.command,  SpliceCommand):
-            e["command_errors"]= self.command.errors
+            e["info_section_errors"] = self.info_section.has("errors")
+        if isinstance(self.command, SpliceCommand):
+            e["command_errors"] = self.command.errors
         e["descriptor_errors"] = [d.errors for d in self.descriptors]
         return e
-    
+
     def decode(self):
         """
         Cue.decode() parses for SCTE35 data
@@ -147,12 +147,12 @@ class Cue(SCTE35Base):
         """
         return self.bites
 
-    def fix_bad_b64(self,data):
+    def fix_bad_b64(self, data):
         """
         fix_bad_b64 fixes bad padding on Base64
         """
-        if len(data) %4!=0:
-            self.errors.append('fixed bad base64 length ')
+        if len(data) % 4 != 0:
+            self.errors.append("fixed bad base64 length ")
         while len(data) % 4 != 0:
             data = data + "="
         return data
@@ -255,7 +255,7 @@ class Cue(SCTE35Base):
         """
         sct = self.info_section.splice_command_type
         if sct not in command_map:
-            self.errors.append(f"Splice Command type {sct} not recognized") 
+            self.errors.append(f"Splice Command type {sct} not recognized")
             return False
         iscl = self.info_section.splice_command_length
         cmd_bites = bites[:iscl]
@@ -269,12 +269,12 @@ class Cue(SCTE35Base):
 
     def _assemble(self):
         for d in self.descriptors:
-            d.errors=[]
+            d.errors = []
         dscptr_bites = self._unloop_descriptors()
         dll = len(dscptr_bites)
         self.info_section.descriptor_loop_length = dll
-        self.info_section.errors=[]
-        self.command.errors=[]
+        self.info_section.errors = []
+        self.command.errors = []
         cmd_bites = self.command.encode()
         cmdl = self.command.command_length = len(cmd_bites)
         self.info_section.splice_command_length = cmdl
@@ -389,7 +389,8 @@ class Cue(SCTE35Base):
         _no_cmd raises an exception if no splice command.
         """
         self.errors.append("A splice command is required")
-      #  raise Exception("\033[7mA splice command is required\033[27m")
+
+    #  raise Exception("\033[7mA splice command is required\033[27m")
 
     def load(self, gonzo):
         """
