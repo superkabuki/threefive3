@@ -4,7 +4,7 @@ scte35.Cue Class
 
 from base64 import b64decode, b64encode
 import json
-from .spare import print2
+from .stuff import print2
 from .bitn import NBin
 from .base import SCTE35Base
 from .section import SpliceInfoSection
