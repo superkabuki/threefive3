@@ -2,7 +2,7 @@
 The bitn.Bitn and bitn.NBin classes
 """
 
-from .spare import print2
+from .stuff import print2
 
 
 class Bitn:
