@@ -263,7 +263,7 @@ class Stream:
         func can be set to a custom function that accepts
         a threefive3.Cue instance as it's only argument.
         """
-        num_pkts = 2800
+        num_pkts =  1400
         for chunk in self.iter_pkts(num_pkts=num_pkts):
             self._decode2cues(chunk, func)
         return False
@@ -387,7 +387,7 @@ class Stream:
             return b""
         while bites[0] == pad:
             bites = bites[1:]
-        return bites
+        return  self._unpad2(bites)
 
     def _unpad2(self, bites):
         pad = 255
@@ -440,9 +440,10 @@ class Stream:
         """
         head_size = 4
         if self._afc_flag(pkt[3]):
+            pkt=pkt[:4] + self._unpad(pkt[4:])
             afl = pkt[4]
             head_size += afl + 1  # +1 for afl byte
-        return self._unpad(pkt[head_size:])
+        return pkt[head_size:]
 
     def _pmt_pid(self, pay, pid):
         if pid in self.pids.pmt:
@@ -499,9 +500,9 @@ class Stream:
 
     def _parse(self, pkt):
         pid = self._parse_info(pkt)
-       # if pid in self.pids.pcr:
+        if pid in self.pids.pcr:
         #    self._chk_pcr(pkt, pid)
-        self._chk_pts(pkt, pid)
+            self._chk_pts(pkt, pid)
         return self._chk_scte35(pkt, pid)
 
     def _pid_has_scte35(self, pid):
