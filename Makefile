@@ -10,7 +10,7 @@ clean:
 
 pypy3: clean
 	$(PYPY3) setup.py sdist bdist_wheel
-	$(PYPY3) setup.py install	
+	$(PYPY3) setup.py install --user	
 
 install: clean pkg
 	$(PY3)  setup.py install --user
@@ -26,13 +26,8 @@ upload: clean pkg
 
 upgrade:
 	$(PIP3) install --upgrade threefive3
-	
-cli:
-	sed -i s/$(PYPY3)/$(PY3)/ threefive3
-	install threefive3 /usr/local/bin
-	
-pypy3-cli:
-	sed -i s/$(PY3)/$(PYPY3)/ threefive34
-	install threefive3 /usr/local/bin
+
+debian: 
+	$(PIP3) install --upgrade threefive3 --break-system-packages
 
 
