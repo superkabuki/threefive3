@@ -4,10 +4,11 @@
 ✅ SCTE-35 Parser  ✅ SCTE-35 Encoder    ✅ SCTE-35 HLS     ✅ SCTE-35 Xml     ✅ SCTE-35 Cli     ✅  SCTE-35 library
 
 
-* Parses SCTE-35 from MPEGTS, HLS, XML, XML+Binary, Base64, Bytes, Hex, and Integers.
+* Parses SCTE-35 from MPEGTS, HLS, XML, XML+Binary, Base64, Bytes, Hex, Integers, JSON, or Python dict.
+* Encode SCTE-35 to Base64, Bytes, Hex, Int, JSON, Xml, or Xml+binary.
 * Built-in network support for Http(s), UDP, and Multicast.
 * Automatic AES decryption for HLS.
-* All HLS SCTE-35 Tags are Supported
+* All HLS SCTE-35 Tags are Supported.
 ___
 ### MPEGTS streams can be parsed for SCTE-35 with three lines of code.
 
