@@ -5,7 +5,6 @@ scte35.hls  hls.py
 
 """
 
-import datetime
 import os
 import sys
 import time
@@ -14,6 +13,7 @@ from .hlstags import TagParser, HEADER_TAGS
 from .segment import Segment
 from .cue import Cue
 from .new_reader import reader
+from .stuff import atohif,  iso8601
 
 REV = "\033[7m"
 NORM = "\033[27m"
@@ -24,28 +24,6 @@ NSUB = f"\n{SUB}"
 ROLLOVER = 95443.717678
 HEADER_TAGS = list(HEADER_TAGS)
 HEADER_TAGS.append("#EXTM3U")
-
-
-def atoif(value):
-    """
-    atoif converts ascii to (int|float)
-    """
-    if isinstance(value, str):
-        try:
-            value = float(value)
-        except:
-            value = int(value)
-    return value
-
-
-def iso8601():
-    """
-    return UTC time in iso8601 format.
-
-    '2023-05-11T15:55:51.'
-
-    """
-    return f"{datetime.datetime.utcnow().isoformat()[:-4]}Z "
 
 
 class Scte35Profile:
@@ -556,7 +534,7 @@ class CuePuller:
             self.cue_state = "OUT"
             self.break_timer = 0.0
             if ":" in line:
-                self.break_duration = atoif(line.split(":")[1])
+                self.break_duration = atohif(line.split(":")[1])
             self.to_sidecar(self.pts, line)
             self.clear()
             print(f"{head}{self.dur_stuff()}{NSUB}{self.media_stuff()}\n")
@@ -769,7 +747,7 @@ class CuePuller:
         if "#EXTINF" in tags:
             if isinstance(tags["#EXTINF"], str):
                 tags["#EXTINF"] = tags["#EXTINF"].rsplit(",", 1)[0]
-            seg_time = round(atoif(tags["#EXTINF"]), 6)
+            seg_time = round(atohif(tags["#EXTINF"]), 6)
             line = self.auto_cuein(line)
             if self.pts is not None:
                 self.pts += seg_time
@@ -885,7 +863,7 @@ class CuePuller:
         """
         if "TARGETDURATION" in line:
             if self.sleep_duration == 0:
-                target_duration = atoif(line.split(":")[1])
+                target_duration = atohif(line.split(":")[1])
                 self.sleep_duration = round(target_duration * 0.5, 3)
                 print(f"{SUB}{REV} Target Duration {NORM} {target_duration}\n")
 
