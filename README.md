@@ -8,15 +8,6 @@
 * Automatic AES decryption for HLS.
 * All HLS SCTE-35 Tags are Supported
 ___
-* [Install](#install) 
-* [SCTE-35 Cli](#the-cli-tool)
-* [SCTE-35 Xml ](https://github.com/superkabuki/threefive3/blob/main/xml.md)
-* [Cue Class](https://github.com/superkabuki/threefive3/blob/main/cue.md)
-* [Stream Class](https://github.com/superkabuki/threefive3/blob/main/stream.md)
-* [Online SCTE-35 Parser](https://iodisco.com/scte35)
-* [Encode SCTE-35](https://github.com/superkabuki/threefive3/blob/main/encode.md)
-* [FFmpeg SCTE35](https://github.com/superkabuki/FFmpeg_SCTE35)
-
 ## MPEGTS streams can be parsed for SCTE-35 with three lines of code.
 
 ```py3
@@ -30,6 +21,29 @@ Type "help", "copyright", "credits" or "license" for more information.
 >>>> strm=Stream('https://futzu.com/xaa.ts')
 
 >>>> strm.decode()
+```
+## Documentation
+
+* the cli tool comes with builtin documentation just type `threefive3 help`
+
+* [Install](#install) 
+* [SCTE-35 Cli](#the-cli-tool)
+* [SCTE-35 Xml ](https://github.com/superkabuki/threefive3/blob/main/xml.md)
+* [Cue Class](https://github.com/superkabuki/threefive3/blob/main/cue.md)
+* [Stream Class](https://github.com/superkabuki/threefive3/blob/main/stream.md)
+* [Online SCTE-35 Parser](https://iodisco.com/scte35)
+* [Encode SCTE-35](https://github.com/superkabuki/threefive3/blob/main/encode.md)
+* [FFmpeg SCTE35](https://github.com/superkabuki/FFmpeg_SCTE35)
+
+* Remember to use the python built in help, that is slways the most up to date.
+
+```rebol
+a@fu:~/build7/threefive3$ pypy3
+Python 3.9.16 (7.3.11+dfsg-2+deb12u3, Dec 30 2024, 22:36:23)
+[PyPy 7.3.11 with GCC 12.2.0] on linux
+Type "help", "copyright", "credits" or "license" for more information.
+>>>> from threefive import Stream
+>>>> help(Stream)
 ```
 
 ___
