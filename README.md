@@ -5,7 +5,7 @@
 
 
 * Parses SCTE-35 from MPEGTS, HLS, XML, XML+Binary, Base64, Bytes, Hex, and Integers.
-* Built-in network support for http(s), UDP, and Multicast.
+* Built-in network support for Http(s), UDP, and Multicast.
 * Automatic AES decryption for HLS.
 * All HLS SCTE-35 Tags are Supported
 ___
