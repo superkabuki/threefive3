@@ -35,9 +35,9 @@ Type "help", "copyright", "credits" or "license" for more information.
 * [Encode SCTE-35](https://github.com/superkabuki/threefive3/blob/main/encode.md)
 * [FFmpeg SCTE35](https://github.com/superkabuki/FFmpeg_SCTE35)
 
-* The cli tool comes with builtin documentation just type `threefive3 help`
+* _The cli tool comes with builtin documentation just type_ `threefive3 help`
 
-* The python built in help is always the most up to date.
+* _The python built in help is always the most up to date._
 
 ```rebol
 a@fu:~/build7/threefive3$ pypy3
