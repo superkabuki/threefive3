@@ -9,11 +9,13 @@ import os
 import sys
 import time
 from collections import deque
+from pprint import pprint
 from .hlstags import TagParser, HEADER_TAGS
 from .segment import Segment
 from .cue import Cue
 from .new_reader import reader
-from .stuff import atohif,  iso8601
+from .stuff import atohif,  iso8601,print2
+
 
 REV = "\033[7m"
 NORM = "\033[27m"
@@ -55,6 +57,9 @@ class Scte35Profile:
         self.seg_type = 0x23
 
     # self.stops = [0x23, 0x31, 0x33, 0x35, 0x37, 0x45, 0x47]
+
+    def __repr__(self):
+        return '\n\n  '.join([f'\n{REV} Profile: {NORM}']+[f'{REV} {k} {NORM} = {v}' for k,v in vars(self).items()])
 
     def _is_int(self, vee, line):
         for item in vee:
@@ -105,16 +110,16 @@ class Scte35Profile:
         if isinstance(vee, list):
             vee = self._vee_is_ints(vee)
         return vee
-
-    def show_profile(self, headline):
-        """
-        show_profile displays profile settings.
-        """
-        print(f"\n\n\t{REV}{headline}{NORM}\n")
-        for que, vee in vars(self).items():
-            vee = self._vee_is_list(vee)
-            print(f"\t{que} = {vee}\n")
-            time.sleep(0.3)
+##
+##    def show_profile(self, headline):
+##        """
+##        show_profile displays profile settings.
+##        """
+##        print(f"\n\n\t{REV}{headline}{NORM}\n")
+##        for que, vee in vars(self).items():
+##            vee = self._vee_is_list(vee)
+##            print(f"\t{que} = {vee}\n")
+##            time.sleep(0.3)
 
     def _is_comment(self, line, this):
         if line[0] == "#" or line[:2] == "//":
@@ -195,7 +200,6 @@ class Scte35Profile:
         if os.path.isfile(pro_file):
             with open(pro_file, "r", encoding="utf-8") as pro_handle:
                 self._parse_profile(pro_handle)
-        self.show_profile("Profile:")
 
     def set_pts(self, cue):
         """
@@ -391,12 +395,12 @@ class AacParser:
         return round((pts % ROLLOVER), 6)
 
 
-class CuePuller:
+class Scte35Hls:
     """
-    CuePuller is the main object.
+   Scte35Hls is the main object.
     """
 
-    def __init__(self):
+    def __init__(self,pro_file="hls.profile"):
         self.media = deque()
         self.sidecar = "hls.sidecar"
         self.dumpfile = "hls.dump"
@@ -424,6 +428,7 @@ class CuePuller:
         self.hls_pts = "HLS"
         self.prof = Scte35Profile()
         self.prof.read_profile(self.pro_file)
+        self.rendition=None
         self.clear_files()
 
     @staticmethod
@@ -977,11 +982,14 @@ class CuePuller:
         self.update_cue_state()
         time.sleep(self.sleep_duration)
 
-    def _parse_manifest(self, manifest):
+    def _parse_manifest(self):
         """
         _parse_manifest, parses m3u8 files.
         """
-        with reader(manifest) as m3u8:
+        if not self.rendition:
+            print("No rendition to parse")
+            return
+        with reader(self.rendition) as m3u8:
             lines = []
             m3u8_lines = self.decode_lines(m3u8.readlines())
             self.chk_window_size(m3u8_lines)
@@ -996,19 +1004,42 @@ class CuePuller:
                     lines = []
             self._post_parse()
 
-    def pull(self, manifest):
+    def pull(self):
         """
         pull m3u8 and parse it.
         """
         print(f"\n{SUB}{REV} Started {NORM} {iso8601()}\n")
-        print(f"{SUB}{REV} Manifest {NORM} {manifest}\n")
-        self.base_uri = manifest.rsplit("/", 1)[0]
+        print(f"{SUB}{REV} Manifest {NORM} {self.rendition}\n")
+        self.base_uri = self.rendition.rsplit("/", 1)[0]
         self.sliding_window = SlidingWindow()
         while self.reload:
-            self._parse_manifest(manifest)
+            self._parse_manifest()
         with open(self.flat, "a") as flat:
             flat.write("#EXT-X-ENDLIST\n")
 
+    def pick_one(self,lines, uri):
+        """
+        pick_one  if lines come from a master.m3u8
+        find the first rendition and make a uri or return uri.
+        """
+        for line in lines:
+            if line.startswith(b"#EXT-X-STREAM-INF"):
+                idx = lines.index(line) + 1
+                line = lines[idx].decode("utf-8")
+                base_url = uri.rsplit("/", 1)[0]
+                uri = base_url + "/" + line
+                uri.replace("\n", "")
+                print(f'Rendition Found {uri}')
+        self.rendition=uri
+
+
+    def find_renditions(self,uri):
+        """
+        find_renditions search master.m3u8 for playable renditions.
+        """
+        with reader(uri) as arg:
+            lines = arg.readlines()
+            self.pick_one(lines, uri)
 
 def _chk_help():
     if "help" in sys.argv:
@@ -1032,30 +1063,6 @@ def precheck():
     _chk_profile()
 
 
-def pick_one(lines, uri):
-    """
-    pick_one  if lines come from a master.m3u8
-    find the first rendition and make a uri or return uri.
-    """
-    for line in lines:
-        if line.startswith(b"#EXT-X-STREAM-INF"):
-            idx = lines.index(line) + 1
-            line = lines[idx].decode("utf-8")
-            base_url = uri.rsplit("/", 1)[0]
-            uri = base_url + "/" + line
-            uri.replace("\n", "")
-    return uri
-
-
-def find_renditions():
-    """
-    find_renditions search master.m3u8 for playable renditions.
-    """
-    uri = sys.argv[1]
-    with reader(uri) as arg:
-        lines = arg.readlines()
-        return pick_one(lines, uri)
-
 
 def cli():
     """
@@ -1072,10 +1079,14 @@ def cli():
      is all that's required.
     """
     precheck()
-    playlist = find_renditions()
-    if playlist:
-        cpulr = CuePuller()
-        cpulr.pull(playlist)
+    hlsparser = Scte35Hls()
+    print(hlsparser.prof)
+    print('\n\n')
+    time.sleep(.3)
+    print(f"{REV} Parsing Manifest {NORM}")
+    manifest = sys.argv[1]
+    hlsparser.find_renditions(manifest)
+    hlsparser.pull()
     sys.exit()
 
 
