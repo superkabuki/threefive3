@@ -2,7 +2,7 @@
 hlstags.py
 
 """
-from .stuff import atoif
+from .stuff import atohif
 
 
 BASIC_TAGS = (
@@ -104,7 +104,7 @@ class TagParser:
         while tail:
             tail = self._strip_last_comma(tail)
             if "=" not in tail:
-                self.tags[tag] = atoif(tail)
+                self.tags[tag] = atohif(tail)
                 return
             tail, value = self._split_value(tag, tail)
             tail = self._split_key(tail, tag, value)
@@ -164,7 +164,7 @@ class TagParser:
         try:
             tail, value = tail.rsplit("=", 1)
             value += hold
-            value = atoif(value)
+            value = atohif(value)
         except:
             tail = None
         return tail, value
