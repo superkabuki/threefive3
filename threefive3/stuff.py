@@ -36,7 +36,7 @@ def iso8601():
     """
     return UTC time in iso8601 format.
 
-    '2023-05-11T15:55:51.'
+    '2023-05-11T15:55:51.47Z'
 
     """
     return f"{datetime.datetime.utcnow().isoformat()[:-4]}Z "
