@@ -33,6 +33,7 @@ class SCTE35Base:
         var_type = str(var_type).split("'")[1]
         err_mesg = f"{var_name} is {var_value} , it should be type {var_type}, {bit_count} bit(s) long."
         self.errors.append(err_mesg)
+        print2(err_mesg)
 
     def _bool_int(self, var_name, var_value, bit_count, var_type):
         if var_type == int:
