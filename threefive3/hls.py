@@ -395,9 +395,9 @@ class AacParser:
         return round((pts % ROLLOVER), 6)
 
 
-class Scte35Hls:
+class HlsParser:
     """
-   Scte35Hls is the main object.
+   HlsParser is the Hls Parser
     """
 
     def __init__(self,pro_file="hls.profile"):
@@ -1079,7 +1079,7 @@ def cli():
      is all that's required.
     """
     precheck()
-    hlsparser = Scte35Hls()
+    hlsparser = HlsParser()
     print(hlsparser.prof)
     print('\n\n')
     time.sleep(.3)
