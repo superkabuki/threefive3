@@ -4,10 +4,12 @@ scte35.__init__.py
 
 
 from .cue import Cue
+from .hls import HlsParser
+from .hlstags import TagParser
 from .section import SpliceInfoSection
 from .segment import Segment
 from .stream import Stream
-from .stuff import print2
+from .stuff import print2, iso8601, atohif
 from .version import version
 
 from .commands import (
