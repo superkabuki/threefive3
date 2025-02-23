@@ -10,6 +10,9 @@
 * Automatic AES decryption for HLS.
 * All HLS SCTE-35 Tags are Supported.
 ___
+# Latest release is v3.0.19
+> Stay up to date, only the latest release is supported. 
+___
 ### MPEGTS streams can be parsed for SCTE-35 with three lines of code.
 
 ```py3
