@@ -122,17 +122,19 @@ class Cue(SCTE35Base):
         Cue.get returns the SCTE-35 Cue
         data as a dict of dicts.
         """
-        if self.command and self.info_section:
-            scte35_data = {
+      #  if self.command and self.info_section:
+        scte35_data = {
+                "errors": self.errs(),
                 "info_section": self.info_section.get(),
                 "command": self.command.get(),
                 "descriptors": self.get_descriptors(),
-            }
-            scte35_data = self._get_dash_data(scte35_data)
-            scte35_data = self._get_packet_data(scte35_data)
-            return scte35_data
-        self.errors.append("command or info section not found")
-        return False
+        }
+        scte35_data = self._get_dash_data(scte35_data)
+        scte35_data = self._get_packet_data(scte35_data)
+            
+        return scte35_data
+     #   self.errors.append("command or info section not found")
+      #  return False
 
     def get_descriptors(self):
         """
@@ -461,7 +463,6 @@ class Cue(SCTE35Base):
         """
         xml returns a threefive3.Node instance
         which can be edited as needed or printed.
-        xmlbin
         """
         sis = self.info_section.xml(ns=ns)
         cmd = self.command.xml(ns=ns)
