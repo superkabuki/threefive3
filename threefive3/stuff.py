@@ -21,7 +21,7 @@ def atohif(value):
     """
     if isinstance(value, str):
         value= value.strip()
-        value = value.replace(',','')
+        value = value.strip(',')
         if '.' in value:
             value = float(value)
         elif '0x' in value.lower():
@@ -36,7 +36,7 @@ def iso8601():
     """
     return UTC time in iso8601 format.
 
-    '2023-05-11T15:55:51.47Z'
+    '2023-05-11T15:55:51.'
 
     """
     return f"{datetime.datetime.utcnow().isoformat()[:-4]}Z "
