@@ -24,6 +24,16 @@ Type "help", "copyright", "credits" or "license" for more information.
 
 >>>> strm.decode()
 ```
+# Heads Up! 
+
+> threefive3 is a lot to do by myself, in my spare time. I'm going to impose on y'all a little. 
+
+> I am currently working on error reporting.  I am trying to aggregate the errors into each object, so if you have multiple errors, you can get them all at once, rather than one at a time. I need to try some stuff so I can see how it works and how it fails.
+> If I have to do this alone, it will take much longer than if y'all help me.
+> I will probably push a couple releases this week, I need you to use then.
+> Be a good citizen and get involved. That's what makes open source work.
+
+  
 # Documentation
 
 * [Install](#install) 
