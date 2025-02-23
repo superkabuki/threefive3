@@ -318,10 +318,12 @@ def to_funk(this):
         strm = Stream(this)
         strm.decode(func=funk())  # funk() works here
     except:  # try to load json or xml
+        cue = Cue()
         try:
-            cue = Cue(this)
+            cue.bites = cue._mk_bits(this)
+            cue.decode()
         except:
-            print2(f"Bad Data:\n{this}")
+            print2(f"Bad Data:\n{cue.errs()}")
             sys.exit()
     if cue:
         funk()(cue)  #   func works here too.
