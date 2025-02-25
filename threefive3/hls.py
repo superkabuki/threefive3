@@ -14,7 +14,7 @@ from .hlstags import TagParser, HEADER_TAGS
 from .segment import Segment
 from .cue import Cue
 from .new_reader import reader
-from .stuff import atohif, iso8601, print2
+from .stuff import atohif, iso8601, print2, red
 
 
 REV = "\033[7m"
@@ -573,7 +573,7 @@ class HlsParser:
         invalid print invalid SCTE-35 HLS tags
         """
         self.clear()
-        print(
+        red(
             f"\n{iso8601()}{REV} Skipped {NORM}  {line}{self.pts_stuff()}{NSUB}{self.media_stuff()}\n"
         )
         return "## " + line
@@ -596,7 +596,7 @@ class HlsParser:
                 self.break_timer = round(float(line.split(":", 1)[1].split("/")[0]), 3)
             except:
                 self.break_timer = 0.0
-        print(f"{iso8601()}{REV} Break Timer {NORM}to {self.break_timer}\n")
+        print(f"{iso8601()}{REV} Break Timer {NORM} {self.break_timer}\n")
         time.sleep(0.1)
 
     def _set_break_duration(self, line, cont_tags):
@@ -616,7 +616,7 @@ class HlsParser:
             except:
                 self.break_duration = None
         if self.break_duration:
-            print(f"{iso8601()}{REV}Break Duration {NORM}to {self.break_duration}\n")
+            print(f"{iso8601()}{REV} Break Duration {NORM} {self.break_duration}\n")
             time.sleep(0.1)
 
     def chk_x_cue_out_cont(self, tags, line):
@@ -628,7 +628,7 @@ class HlsParser:
         if self.cue_state not in ["OUT", "CONT"] and not self.first_segment:
             return None
         if self.first_segment:
-            print(f"{iso8601()}{REV} Resuming Ad Break {NORM}\n")
+            print(f"{iso8601()}{REV}Resuming Ad Break {NORM}\n")
             self.cue_state = "CONT"
             self._set_break_timer(line, cont_tags)
             self._set_break_duration(line, cont_tags)
@@ -729,7 +729,7 @@ class HlsParser:
                 if self.break_timer >= self.break_duration:
                     self.cue_state = "IN"
                     self.clear()
-                    print(
+                    red(
                         f"{iso8601()}{REV} AUTO CUE-IN {NORM}{self.pts_stuff()}{self.diff_stuff()}{NSUB}{self.media_stuff()}\n"
                     )
                     self.reset_break()
@@ -813,7 +813,7 @@ class HlsParser:
             print(
                 (NSUB).join(
                     [
-                        f"\n{iso8601()}{REV} SCTE-35 {NORM}",
+                        f"\n{iso8601()}{REV} MPEGTS SCTE-35  {NORM}",
                         f"Stream PTS: {round(self.pts,6)}",
                         f"PreRoll: {round(cue_pts - self.pts,6)}",
                         f"Splice Point: {round(cue_pts,6)}",
@@ -992,7 +992,7 @@ class HlsParser:
         _parse_manifest, parses m3u8 files.
         """
         if not self.rendition:
-            print("No rendition to parse")
+            red("No rendition to parse")
             return
         with reader(self.rendition) as m3u8:
             lines = []
