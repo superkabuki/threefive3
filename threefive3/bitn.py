@@ -2,7 +2,7 @@
 The bitn.Bitn and bitn.NBin classes
 """
 
-from .stuff import print2
+from .stuff import red
 
 
 class Bitn:
@@ -16,12 +16,11 @@ class Bitn:
     def __init__(self, bites):
         # self.bites = bites
         self.bitsize = self.idx = len(bites) << 3
-        if isinstance(bites,bytes):
+        if isinstance(bites, bytes):
             self.bits = int.from_bytes(bites, byteorder="big")
-        if isinstance(bites,int):
-            self.bits=bites
+        if isinstance(bites, int):
+            self.bits = bites
 
-        
     def __repr__(self):
         return str(vars(self))
 
@@ -93,8 +92,8 @@ class Bitn:
         negative_shift is called instead of
         throwing a negative shift count error.
         """
-        print2(f"{num_bits} bits requested, but only {self.idx} bits left.")
-        print2(f"\n bytes remaining: {self.as_bytes(self.idx)} ")
+        red(f"{num_bits} bits requested, but only {self.idx} bits left.")
+        red(f"\n bytes remaining: {self.as_bytes(self.idx)} ")
 
 
 class NBin:
@@ -161,7 +160,7 @@ class NBin:
         if isinstance(hex_str, str):
             dehexed = int(hex_str, 16)
         # just in case hex_str is an int....
-        if isinstance(hex_str,int):
+        if isinstance(hex_str, int):
             dehexed = hex_str
         self.add_int(dehexed, bit_len)
 
