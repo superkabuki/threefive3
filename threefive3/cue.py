@@ -139,10 +139,9 @@ class Cue(SCTE35Base):
         """
         fix_bad_b64 fixes bad padding on Base64
         """
-        if len(data) % 4 != 0:
-            red("bad base64 length... fixed. ")
         while len(data) % 4 != 0:
             data = data + "="
+        red("bad base64 length fixed.\r\n ")
         return data
 
     def _int_bits(self, data):
