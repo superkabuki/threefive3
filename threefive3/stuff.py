@@ -20,16 +20,15 @@ def atohif(value):
     atoif converts ascii to (int|float)
     """
     if isinstance(value, str):
-        value= value.strip()
-        value = value.strip(',')
-        if '.' in value:
+        value = value.strip()
+        value = value.strip(",")
+        if "." in value:
             value = float(value)
-        elif '0x' in value.lower():
-            value = int(value,16)
-        elif  value.isdigit():
+        elif "0x" in value.lower():
+            value = int(value, 16)
+        elif value.isdigit():
             value = int(value)
     return value
-
 
 
 def iso8601():
@@ -42,6 +41,9 @@ def iso8601():
     return f"{datetime.datetime.utcnow().isoformat()[:-4]}Z "
 
 
+def red(message):
+    """
+    red  print error message in red to stderr.
 
-
-
+    """
+    print2(f"  \033[91m message \033[0m ")
