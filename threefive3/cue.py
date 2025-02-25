@@ -4,7 +4,7 @@ scte35.Cue Class
 
 from base64 import b64decode, b64encode
 import json
-from .stuff import red
+from .stuff import red, blue
 from .bitn import NBin
 from .base import SCTE35Base
 from .section import SpliceInfoSection
@@ -53,7 +53,7 @@ class Cue(SCTE35Base):
         self.bites = None
         if data:
             self.bites = self._mk_bits(data)
-            self.decode()
+           # self.decode()
         self.packet_data = packet_data
         self.dash_data = None
         self.decode()
@@ -141,7 +141,7 @@ class Cue(SCTE35Base):
         """
         while len(data) % 4 != 0:
             data = data + "="
-        red("bad base64 length fixed.\r\n ")
+        blue("bad base64 length fixed.\n ")
         return data
 
     def _int_bits(self, data):
@@ -281,7 +281,6 @@ class Cue(SCTE35Base):
             self._assemble()
             self._encode_crc()
             return b64encode(self.bites).decode()
-        self._no_cmd()
         return False
 
     def encode(self):
@@ -360,8 +359,8 @@ class Cue(SCTE35Base):
         if 'tag' is included in each dict,
         a descriptor instance will be created.
         """
-        ##        if not isinstance(dlist, list):
-        ##            raise Exception("\033[7mdescriptors should be a list\033[27m")
+        if not isinstance(dlist, list):
+            red('descriptors should be a list')
         for dstuff in dlist:
             dscptr = descriptor_map[dstuff["tag"]]()
             dscptr.load(dstuff)
@@ -372,8 +371,6 @@ class Cue(SCTE35Base):
         _no_cmd raises an exception if no splice command.
         """
         red("A splice command is required")
-
-    #  raise Exception("\033[7mA splice command is required\033[27m")
 
     def load(self, gonzo):
         """
@@ -402,8 +399,6 @@ class Cue(SCTE35Base):
                 self._from_xml(gonzo)
                 return self.bites
             gonzo = json.loads(gonzo)
-        if "command" not in gonzo:
-            self._no_cmd()
         self._load_info_section(gonzo)
         self._load_command(gonzo)
         self._load_descriptors(gonzo["descriptors"])
