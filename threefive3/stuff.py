@@ -46,4 +46,4 @@ def red(message):
     red  print error message in red to stderr.
 
     """
-    print2(f"  \033[91m message \033[0m ")
+    print2(f"  \033[91m {message} \033[0m ")
