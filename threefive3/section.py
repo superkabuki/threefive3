@@ -6,6 +6,7 @@ SCTE35 Splice Info Section
 
 from .bitn import Bitn
 from .base import SCTE35Base
+from .stuff import red
 from .xml import Node
 
 
@@ -50,9 +51,7 @@ class SpliceInfoSection(SCTE35Base):
         bitbin = Bitn(bites)
         self.table_id = bitbin.as_hex(8)
         if self.table_id != "0xfc":
-            raise ValueError(
-                ("splice_info_section.table_id should be 0xfc Not: ", self.table_id)
-            )
+            red(f"splice_info_section.table_id should be 0xfc Not:  {self.table_id}")
         self.section_syntax_indicator = bitbin.as_flag(1)
         self.private = bitbin.as_flag(1)
         self.sap_type = bitbin.as_hex(2)
@@ -80,14 +79,14 @@ class SpliceInfoSection(SCTE35Base):
         encode SpliceInfoSection.section_syntax_indicator
         """
         self.section_syntax_indicator = False
-        self._chk_var(bool,nbin.add_flag,"section_syntax_indicator", 1)
+        self._chk_var(bool, nbin.add_flag, "section_syntax_indicator", 1)
 
     def _encode_private_flag(self, nbin):
         """
         encode SpliceInfoSection.private
         """
         self.private = False
-        self._chk_var(bool,nbin.add_flag, "private", 1)
+        self._chk_var(bool, nbin.add_flag, "private", 1)
 
     def _encode_sap(self, nbin):
         """
@@ -96,7 +95,7 @@ class SpliceInfoSection(SCTE35Base):
         if self.sap_type not in sap_map:
             self.sap_type = "0x03"
         self.sap_details = sap_map[self.sap_type]
-        self._chk_var(str,nbin.add_hex, "sap_type", 2)
+        self._chk_var(str, nbin.add_hex, "sap_type", 2)
 
     def _encode_section_length(self, nbin):
         """
@@ -104,7 +103,7 @@ class SpliceInfoSection(SCTE35Base):
         """
         if not self.section_length:
             self.section_length = 11
-        self._chk_var(int, nbin.add_int,"section_length", 12)
+        self._chk_var(int, nbin.add_int, "section_length", 12)
 
     def _encode_protocol_version(self, nbin):
         """
@@ -121,16 +120,16 @@ class SpliceInfoSection(SCTE35Base):
         """
         if not self.encrypted_packet:
             self.encrypted_packet = False
-        self._chk_var(bool,nbin.add_flag, "encrypted_packet",1)
+        self._chk_var(bool, nbin.add_flag, "encrypted_packet", 1)
         if not self.encryption_algorithm:
             self.encryption_algorithm = 0
-        self._chk_var(int, nbin.add_int,"encryption_algorithm", 6)
+        self._chk_var(int, nbin.add_int, "encryption_algorithm", 6)
 
     def _encode_pts_adjustment(self, nbin):
         """
         encode SpliceInfoSection.pts_adjustment_ticks
         """
-        nbin.add_int( self.as_ticks(self.pts_adjustment) , 33)
+        nbin.add_int(self.as_ticks(self.pts_adjustment), 33)
 
     def _encode_cw_index(self, nbin):
         """
@@ -144,9 +143,9 @@ class SpliceInfoSection(SCTE35Base):
         """
         encode SpliceInfoSection.tier
         """
-   #     if not self.tier:
+        #     if not self.tier:
         self.tier = "0xfff"
-        nbin.add_hex( self.tier, 12)
+        nbin.add_hex(self.tier, 12)
 
     def _encode_splice_command(self, nbin):
         """
@@ -155,7 +154,7 @@ class SpliceInfoSection(SCTE35Base):
         """
         if not self.splice_command_length:
             self.splice_command_length = 0
-        self._chk_var(int, nbin.add_int,"splice_command_length", 12)
+        self._chk_var(int, nbin.add_int, "splice_command_length", 12)
         if not self.splice_command_type:
             self.splice_command_type = 0
         self._chk_var(int, nbin.add_int, "splice_command_type", 8)
