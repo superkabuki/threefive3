@@ -2,7 +2,6 @@
 scte35.__init__.py
 """
 
-
 from .cue import Cue
 from .hls import HlsParser
 from .hlstags import TagParser
