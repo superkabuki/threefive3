@@ -6,7 +6,7 @@ import io
 import sys
 from .crc import crc32
 from .bitn import NBin
-from .stuff import print2
+from .stuff import red
 from .stream import Stream
 
 fixme = []
@@ -197,12 +197,12 @@ def sixfix(arg):
     global fixme
     fixme = []
     if not sixed:
-        print2("No bin data SCTE-35 streams were found.")
+        red("No bin data SCTE-35 streams were found.")
         return
     s2 = SixFix(arg)
     s2.con_pids = sixed
     s2.convert_pids()
-    print2(f'Wrote: sixfixed-{arg.rsplit("/")[-1]}\n')
+    red(f'Wrote: sixfixed-{arg.rsplit("/")[-1]}\n')
     return
 
 
