@@ -14,7 +14,7 @@ from .hlstags import TagParser, HEADER_TAGS
 from .segment import Segment
 from .cue import Cue
 from .new_reader import reader
-from .stuff import atohif, iso8601, print2, red
+from .stuff import atohif, iso8601, print2, red,blue
 
 
 REV = "\033[7m"
@@ -114,17 +114,6 @@ class Scte35Profile:
         if isinstance(vee, list):
             vee = self._vee_is_ints(vee)
         return vee
-
-    ##
-    ##    def show_profile(self, headline):
-    ##        """
-    ##        show_profile displays profile settings.
-    ##        """
-    ##        print(f"\n\n\t{REV}{headline}{NORM}\n")
-    ##        for que, vee in vars(self).items():
-    ##            vee = self._vee_is_list(vee)
-    ##            print(f"\t{que} = {vee}\n")
-    ##            time.sleep(0.3)
 
     def _is_comment(self, line, this):
         if line[0] == "#" or line[:2] == "//":
@@ -573,9 +562,9 @@ class HlsParser:
         invalid print invalid SCTE-35 HLS tags
         """
         self.clear()
-        red(
-            f"\n{iso8601()}{REV} Skipped {NORM}  {line}{self.pts_stuff()}{NSUB}{self.media_stuff()}\n"
-        )
+        blue(
+            f"\n{iso8601()}{REV} Skipped {NORM}  {line}\n")
+        print(f"{self.pts_stuff()}{NSUB}{self.media_stuff()}\n")
         return "## " + line
 
     def show_tags(self, tags):
@@ -628,7 +617,7 @@ class HlsParser:
         if self.cue_state not in ["OUT", "CONT"] and not self.first_segment:
             return None
         if self.first_segment:
-            print(f"{iso8601()}{REV}Resuming Ad Break {NORM}\n")
+            blue(f"{REV}Resuming Ad Break {NORM}{iso8601()}\n")
             self.cue_state = "CONT"
             self._set_break_timer(line, cont_tags)
             self._set_break_duration(line, cont_tags)
@@ -729,7 +718,7 @@ class HlsParser:
                 if self.break_timer >= self.break_duration:
                     self.cue_state = "IN"
                     self.clear()
-                    red(
+                    blue(
                         f"{iso8601()}{REV} AUTO CUE-IN {NORM}{self.pts_stuff()}{self.diff_stuff()}{NSUB}{self.media_stuff()}\n"
                     )
                     self.reset_break()
@@ -875,7 +864,7 @@ class HlsParser:
             if self.sleep_duration == 0:
                 target_duration = atohif(line.split(":")[1])
                 self.sleep_duration = round(target_duration * 0.5, 3)
-                print(f"{SUB}{REV} Target Duration {NORM} {target_duration}\n")
+                blue(f"{SUB}{REV} Target Duration {NORM} {target_duration}\n")
 
     def _mk_window_size(self, lines):
         return len([line for line in lines if "#EXTINF:" in line])
@@ -890,7 +879,7 @@ class HlsParser:
         if not self.window_size:
             self.window_size = self._mk_window_size(lines)
             self.sliding_window.size = self.window_size
-            print(f"{SUB}{REV} Window Size {NORM} {self.window_size}\n")
+            blue(f"{SUB}{REV} Window Size {NORM} {self.window_size}\n")
 
     def update_cue_state(self):
         """
@@ -1013,8 +1002,8 @@ class HlsParser:
         """
         pull m3u8 and parse it.
         """
-        print(f"\n{SUB}{REV} Started {NORM} {iso8601()}\n")
-        print(f"{SUB}{REV} Manifest {NORM} {self.rendition}\n")
+        blue(f"\n{SUB}{REV} Started {NORM} {iso8601()}\n")
+        blue(f"{SUB}{REV} Manifest {NORM} {self.rendition}\n")
         self.base_uri = self.rendition.rsplit("/", 1)[0]
         self.sliding_window = SlidingWindow()
         while self.reload:
@@ -1034,7 +1023,7 @@ class HlsParser:
                 base_url = uri.rsplit("/", 1)[0]
                 uri = base_url + "/" + line
                 uri.replace("\n", "")
-                print(f"Rendition Found {uri}")
+                blue(f"\t{REV}Rendition Found {NORM} {uri}")
         self.rendition = uri
 
     def find_renditions(self, uri):
@@ -1087,7 +1076,7 @@ def cli():
     print(hlsparser.prof)
     print("\n\n")
     time.sleep(0.3)
-    print(f"{REV}    Parsing    {NORM}")
+    blue(f"{REV}    Parsing    {NORM}")
     manifest = sys.argv[1]
     hlsparser.find_renditions(manifest)
     hlsparser.pull()
