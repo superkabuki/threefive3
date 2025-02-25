@@ -39,7 +39,6 @@ __A red font is an error.__
 
 __A blue font is info.__
 ![image](https://github.com/user-attachments/assets/55c976b0-2a75-4112-aef1-752304a4ebf8)
-
 * Both are written to stderr aka 2 
 * Not all errors have been converted to the red vs. blue format, but they will be. 
 * Expect red vs. blue in the next release, v3.0.21, probably this week.
