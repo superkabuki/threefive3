@@ -29,14 +29,21 @@ Type "help", "copyright", "credits" or "license" for more information.
 ```
 # Heads Up! 
 
-> threefive3 is a lot to do by myself, in my spare time. I'm going to impose on y'all a little. 
+I've changed my mind on the whole error reporting thing, it was getting too complicated. <br> 
+If something is complicated, people won't use it, and I am included in people.
+<br><br>
+The new error system is named after the groundbreaking series [red vs blue](https://rtarchive.org/shows/blood-gulch-chronicles)
 
-> I am currently working on error reporting.  I am trying to aggregate the errors into each object, so if you have multiple errors, you can get them all at once, rather than one at a time. I need to try some stuff so I can see how it works and how it fails.
-> If I have to do this alone, it will take much longer than if y'all help me.
-> I will probably push a couple releases this week, I need you to use then.
-> Be a good citizen and get involved. That's what makes open source work.
+__A red font is an error.__
+![image](https://github.com/user-attachments/assets/489c24d9-5d1a-4844-bac8-58425b9a8786)
 
-  
+__A blue font is info.__
+![image](https://github.com/user-attachments/assets/55c976b0-2a75-4112-aef1-752304a4ebf8)
+
+* Both are written to stderr aka 2 
+* Not all errors have been converted to the red vs. blue format, but they will be. 
+* Expect red vs. blue in the next release, v3.0.21, probably this week.
+
 # Documentation
 
 * [Install](#install) 
