@@ -4,6 +4,7 @@ SCTE35 Splice Commands
 
 from .bitn import Bitn
 from .base import SCTE35Base
+from .stuff import red
 from .xml import Node
 
 
@@ -164,9 +165,7 @@ class TimeSignal(SpliceCommand):
         if self.time_specified_flag:
             nbin.reserve(6)
             if not isinstance(self.pts_time, float):
-                raise ValueError(
-                    "\033[7mA float for pts_time for the splice command is required.\033[27m"
-                )
+                red(" A float for pts_time for the splice command is required. ")
             self.pts_time = round(self.pts_time, 6)
             nbin.add_int(int(self.as_ticks(self.pts_time)), 33)
         else:
@@ -296,7 +295,7 @@ class SpliceInsert(TimeSignal):
         }
         for k, v in si_attrs.items():
             if v is None:
-                raise ValueError(f"\033[7mSpliceInsert.{k} needs to be set\033[27m")
+                red(f"SpliceInsert.{k} needs to be set")
         si = Node("SpliceInsert", attrs=si_attrs, ns=ns)
         if self.pts_time:
             prgm = Node("Program", ns=ns)
