@@ -4,7 +4,7 @@ scte35.Cue Class
 
 from base64 import b64decode, b64encode
 import json
-from .stuff import print2
+from .stuff import red
 from .bitn import NBin
 from .base import SCTE35Base
 from .section import SpliceInfoSection
@@ -47,7 +47,6 @@ class Cue(SCTE35Base):
         data may be packet bites or encoded string
         packet_data is a instance passed from a Stream instance
         """
-        self.errors = []
         self.command = None
         self.descriptors = []
         self.info_section = SpliceInfoSection()
@@ -61,18 +60,6 @@ class Cue(SCTE35Base):
 
     def __repr__(self):
         return str(self.__dict__)
-
-    def errs(self):
-        """
-        errs  show encoding errors.
-        """
-        e = {"cue.errors": self.errors}
-        if self.info_section:
-            e["info_section_errors"] = self.info_section.has("errors")
-        if isinstance(self.command, SpliceCommand):
-            e["command_errors"] = self.command.errors
-        e["descriptor_errors"] = [d.errors for d in self.descriptors]
-        return e
 
     def decode(self):
         """
@@ -122,19 +109,18 @@ class Cue(SCTE35Base):
         Cue.get returns the SCTE-35 Cue
         data as a dict of dicts.
         """
-      #  if self.command and self.info_section:
-        scte35_data = {
-                "errors": self.errs(),
+        if self.command and self.info_section:
+            scte35_data = {
                 "info_section": self.info_section.get(),
                 "command": self.command.get(),
                 "descriptors": self.get_descriptors(),
-        }
-        scte35_data = self._get_dash_data(scte35_data)
-        scte35_data = self._get_packet_data(scte35_data)
-            
-        return scte35_data
-     #   self.errors.append("command or info section not found")
-      #  return False
+            }
+            scte35_data = self._get_dash_data(scte35_data)
+            scte35_data = self._get_packet_data(scte35_data)
+
+            return scte35_data
+        red("command or info section not found")
+        return False
 
     def get_descriptors(self):
         """
@@ -154,7 +140,7 @@ class Cue(SCTE35Base):
         fix_bad_b64 fixes bad padding on Base64
         """
         if len(data) % 4 != 0:
-            self.errors.append("fixed bad base64 length ")
+            red("bad base64 length... fixed. ")
         while len(data) % 4 != 0:
             data = data + "="
         return data
@@ -257,7 +243,7 @@ class Cue(SCTE35Base):
         """
         sct = self.info_section.splice_command_type
         if sct not in command_map:
-            self.errors.append(f"Splice Command type {sct} not recognized")
+            red(f"Splice Command type {sct} not recognized")
             return False
         iscl = self.info_section.splice_command_length
         cmd_bites = bites[:iscl]
@@ -270,13 +256,9 @@ class Cue(SCTE35Base):
     # encode related
 
     def _assemble(self):
-        for d in self.descriptors:
-            d.errors = []
         dscptr_bites = self._unloop_descriptors()
         dll = len(dscptr_bites)
         self.info_section.descriptor_loop_length = dll
-        self.info_section.errors = []
-        self.command.errors = []
         cmd_bites = self.command.encode()
         cmdl = self.command.command_length = len(cmd_bites)
         self.info_section.splice_command_length = cmdl
@@ -390,7 +372,7 @@ class Cue(SCTE35Base):
         """
         _no_cmd raises an exception if no splice command.
         """
-        self.errors.append("A splice command is required")
+        red("A splice command is required")
 
     #  raise Exception("\033[7mA splice command is required\033[27m")
 
@@ -455,7 +437,7 @@ class Cue(SCTE35Base):
                     comment = f"{table22[d.segmentation_type_id]}"
                     sis.add_comment(comment)
                 else:
-                    d.errors.append("Segmentation type id not in table 22")
+                    red("Segmentation type id not in table 22")
             sis.add_child(d.xml(ns=ns))
         return sis
 
