@@ -14,13 +14,11 @@ from .hlstags import TagParser, HEADER_TAGS
 from .segment import Segment
 from .cue import Cue
 from .new_reader import reader
-from .stuff import atohif,  iso8601,print2
+from .stuff import atohif, iso8601, print2
 
 
 REV = "\033[7m"
 NORM = "\033[27m"
-# REV = ""
-# NORM = ""
 SUB = "\t"
 NSUB = f"\n{SUB}"
 ROLLOVER = 95443.717678
@@ -40,6 +38,7 @@ class Scte35Profile:
         self.expand_cues = False  # Show SCTE-35 Cues fully expanded.
         self.parse_segments = True  # Parse Segments for SCTE-35.
         self.parse_manifests = True  # Parse m3u8 files for SCTE-35 HLS tags.
+        #  Parse these types of HLS SCTE-35 tags.
         self.hls_tags = [
             "#EXT-OATCLS-SCTE35",
             "#EXT-X-CUE-OUT-CONT",
@@ -47,11 +46,13 @@ class Scte35Profile:
             "#EXT-X-SCTE35",
             "#EXT-X-CUE-IN",
             "#EXT-X-CUE-OUT",
-        ]  #  Parse these types of HLS SCTE-35 tags.
-        self.command_types = [6, 5]  # Which SCTE-35 Commands to parse.
+        ]
+        # Which Splice Commands types to parse.
+        self.command_types = [6, 5]
+        # Which  Splice Descriptors tags to parse.
         self.descriptor_tags = [
             2,
-        ]  # Which Descriptors to parse.
+        ] 
         # Which Descriptor Segmentation Types IDs should be parsed
         self.starts = [0x22, 0x30, 0x32, 0x34, 0x36, 0x44, 0x46]
         self.seg_type = 0x23
@@ -59,7 +60,10 @@ class Scte35Profile:
     # self.stops = [0x23, 0x31, 0x33, 0x35, 0x37, 0x45, 0x47]
 
     def __repr__(self):
-        return '\n\n  '.join([f'\n{REV} Profile: {NORM}']+[f'{REV} {k} {NORM} = {v}' for k,v in vars(self).items()])
+        return "\n\n  ".join(
+            [f"\n{REV} Profile: {NORM}"]
+            + [f"{REV} {k} {NORM} = {v}" for k, v in vars(self).items()]
+        )
 
     def _is_int(self, vee, line):
         for item in vee:
@@ -110,16 +114,17 @@ class Scte35Profile:
         if isinstance(vee, list):
             vee = self._vee_is_ints(vee)
         return vee
-##
-##    def show_profile(self, headline):
-##        """
-##        show_profile displays profile settings.
-##        """
-##        print(f"\n\n\t{REV}{headline}{NORM}\n")
-##        for que, vee in vars(self).items():
-##            vee = self._vee_is_list(vee)
-##            print(f"\t{que} = {vee}\n")
-##            time.sleep(0.3)
+
+    ##
+    ##    def show_profile(self, headline):
+    ##        """
+    ##        show_profile displays profile settings.
+    ##        """
+    ##        print(f"\n\n\t{REV}{headline}{NORM}\n")
+    ##        for que, vee in vars(self).items():
+    ##            vee = self._vee_is_list(vee)
+    ##            print(f"\t{que} = {vee}\n")
+    ##            time.sleep(0.3)
 
     def _is_comment(self, line, this):
         if line[0] == "#" or line[:2] == "//":
@@ -397,15 +402,15 @@ class AacParser:
 
 class HlsParser:
     """
-   HlsParser is the Hls Parser
+    HlsParser is the Hls Parser
     """
 
-    def __init__(self,pro_file="hls.profile"):
+    def __init__(self, pro_file="hls.profile"):
         self.media = deque()
         self.sidecar = "hls.sidecar"
         self.dumpfile = "hls.dump"
         self.flat = "hlsflat.m3u8"
-        self.pro_file = "hls.profile"
+        self.pro_file = pro_file
         self.m3u8 = "hls.m3u8"
         self.last_dump_line = None
         self.base_uri = None
@@ -428,7 +433,7 @@ class HlsParser:
         self.hls_pts = "HLS"
         self.prof = Scte35Profile()
         self.prof.read_profile(self.pro_file)
-        self.rendition=None
+        self.rendition = None
         self.clear_files()
 
     @staticmethod
@@ -1017,7 +1022,7 @@ class HlsParser:
         with open(self.flat, "a") as flat:
             flat.write("#EXT-X-ENDLIST\n")
 
-    def pick_one(self,lines, uri):
+    def pick_one(self, lines, uri):
         """
         pick_one  if lines come from a master.m3u8
         find the first rendition and make a uri or return uri.
@@ -1029,17 +1034,17 @@ class HlsParser:
                 base_url = uri.rsplit("/", 1)[0]
                 uri = base_url + "/" + line
                 uri.replace("\n", "")
-                print(f'Rendition Found {uri}')
-        self.rendition=uri
+                print(f"Rendition Found {uri}")
+        self.rendition = uri
 
-
-    def find_renditions(self,uri):
+    def find_renditions(self, uri):
         """
         find_renditions search master.m3u8 for playable renditions.
         """
         with reader(uri) as arg:
             lines = arg.readlines()
             self.pick_one(lines, uri)
+
 
 def _chk_help():
     if "help" in sys.argv:
@@ -1063,7 +1068,6 @@ def precheck():
     _chk_profile()
 
 
-
 def cli():
     """
     cli is a function to use in a command line tool
@@ -1081,9 +1085,9 @@ def cli():
     precheck()
     hlsparser = HlsParser()
     print(hlsparser.prof)
-    print('\n\n')
-    time.sleep(.3)
-    print(f"{REV} Parsing Manifest {NORM}")
+    print("\n\n")
+    time.sleep(0.3)
+    print(f"{REV}    Parsing    {NORM}")
     manifest = sys.argv[1]
     hlsparser.find_renditions(manifest)
     hlsparser.pull()
