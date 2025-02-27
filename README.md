@@ -35,15 +35,20 @@ Type "help", "copyright", "credits" or "license" for more information.
 
 * [Install](#install)
 
-* [SCTE-35 Cli Super Tool](#the-cli-tool) Encodes, Decodes, and Recodes. This is pretty cool, it does SCTE-35 seven different ways.
-*  * The cli tool comes with builtin documentation just type `threefive3 help`
+#### Cli
 
-* [SCTE-35 Xml ](https://github.com/superkabuki/threefive3/blob/main/xml.md) The people wanted it so I finally did Xml. I feel cheap and dirty.
+* [SCTE-35 Cli Super Tool](#the-cli-tool) Encodes, Decodes, and Recodes. This is pretty cool, it does SCTE-35 seven different ways.
+     * The cli tool comes with builtin documentation just type `threefive3 help`
+
+#### Xml
+
+* [SCTE-35 Xml ](https://github.com/superkabuki/threefive3/blob/main/xml.md) The people wanted it so I finally did Xml.
+   * I feel cheap and dirty.
+___
 
 #### `Classes`
-* [Cue Class](https://github.com/superkabuki/threefive3/blob/main/cue.md)  Cue is the main SCTE-35 class to use. 
-* [Stream Class](https://github.com/superkabuki/threefive3/blob/main/stream.md)  The Stream class handles MPEGTS SCTE-35 streams local, Http(s), UDP, and Multicast.
-* * The python built in help is always the most up to date docs for the library.
+
+* The python built in help is always the most up to date docs for the library.
 
 ```rebol
 a@fu:~/build7/threefive3$ pypy3
@@ -54,13 +59,19 @@ Type "help", "copyright", "credits" or "license" for more information.
 >>>> help(Stream)
 ```
 
+* [Cue Class](https://github.com/superkabuki/threefive3/blob/main/cue.md)  Cue is the main SCTE-35 class to use. 
+* [Stream Class](https://github.com/superkabuki/threefive3/blob/main/stream.md)  The Stream class handles MPEGTS SCTE-35 streams local, Http(s), UDP, and Multicast.
+___
+
 #### `| more`
 
-* [Online SCTE-35 Parser](https://iodisco.com/scte35)  Supporte Base64, Bytes,Hex,Int, Json, Xml, and Xml+binary. __Damn__.
+* [Online SCTE-35 Parser](https://iodisco.com/scte35)  Supporte Base64, Bytes,Hex,Int, Json, Xml, and Xml+binary.
+    * __Damn__.
 
 * [Encode SCTE-35](https://github.com/superkabuki/threefive3/blob/main/encode.md) Some encoding code examples. 
 
-* [FFmpeg SCTE35](https://github.com/superkabuki/FFmpeg_SCTE35) FFmpeg with the SuperKabui SCTE-35 Patch applied. __Hell yes.__
+* [FFmpeg SCTE35](https://github.com/superkabuki/FFmpeg_SCTE35) FFmpeg with the SuperKabui SCTE-35 Patch applied.
+   * __Hell Yes.__
 
 ___
 
