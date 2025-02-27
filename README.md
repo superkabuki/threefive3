@@ -32,6 +32,7 @@ Type "help", "copyright", "credits" or "license" for more information.
 
 ### `Documentation`
 
+
 * [Install](#install)
 
 * [SCTE-35 Cli Super Tool](#the-cli-tool) Encodes, Decodes, and Recodes. This is pretty cool, it does SCTE-35 seven different ways.
@@ -104,7 +105,7 @@ ___
 ```rebol
 threefive3 udp://@235.2.5.35:3535
 ```
-* If a file comtains a SCTE-35 Cue as a string( base64,hex,int,json,xml or xml+bin), redirect the file contents.
+* If a file comtains a SCTE-35 cue as a string( base64,hex,int,json,xml or xml+bin), redirect the file contents.
 ```rebol
 
   threefive3 < json.json  
