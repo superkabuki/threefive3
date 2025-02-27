@@ -30,7 +30,7 @@ Type "help", "copyright", "credits" or "license" for more information.
 >>>> strm.decode()
 ```
 
-### `Documentation`
+# `Documentation`
 
 
 * [Install](#install)
