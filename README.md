@@ -9,8 +9,8 @@
 * Built-in network support for HTTP(S), UDP, and Multicast.
 * Automatic AES decryption for HLS.
 * All HLS SCTE-35 Tags are Supported.
-___
-# Latest release is v3.0.19
+
+### Latest release is v3.0.19
 > Stay up to date, only the latest release is supported. 
 ___
 ### MPEGTS streams can be parsed for SCTE-35 with three lines of code.
@@ -27,36 +27,20 @@ Type "help", "copyright", "credits" or "license" for more information.
 
 >>>> strm.decode()
 ```
-# Heads Up! 
 
-I've changed my mind on the whole error reporting thing, it was getting too complicated. <br> 
-If something is complicated, people won't use it, and I am included in people.
-<br><br>
-The new error system is named after the groundbreaking series [red vs blue](https://rtarchive.org/shows/blood-gulch-chronicles)
+### `Documentation`
 
-__A red font is an error.__
-![image](https://github.com/user-attachments/assets/489c24d9-5d1a-4844-bac8-58425b9a8786)
+* [Install](#install)
 
-__A blue font is info.__
-![image](https://github.com/user-attachments/assets/55c976b0-2a75-4112-aef1-752304a4ebf8)
-* Both are written to stderr aka 2 
-* Not all errors have been converted to the red vs. blue format, but they will be. 
-* Expect red vs. blue in the next release, v3.0.21, probably this week.
+* [SCTE-35 Cli Super Tool](#the-cli-tool) Encodes, Decodes, and Recodes. This is pretty cool, it does SCTE-35 seven different ways.
+*  * The cli tool comes with builtin documentation just type `threefive3 help`
 
-# Documentation
+* [SCTE-35 Xml ](https://github.com/superkabuki/threefive3/blob/main/xml.md) The people wanted it so I finally did Xml. I feel cheap and dirty.
 
-* [Install](#install) 
-* [SCTE-35 Cli](#the-cli-tool)
-* [SCTE-35 Xml ](https://github.com/superkabuki/threefive3/blob/main/xml.md)
-* [Cue Class](https://github.com/superkabuki/threefive3/blob/main/cue.md)
-* [Stream Class](https://github.com/superkabuki/threefive3/blob/main/stream.md)
-* [Online SCTE-35 Parser](https://iodisco.com/scte35)
-* [Encode SCTE-35](https://github.com/superkabuki/threefive3/blob/main/encode.md)
-* [FFmpeg SCTE35](https://github.com/superkabuki/FFmpeg_SCTE35)
-
-* _The cli tool comes with builtin documentation just type_ `threefive3 help`
-
-* _The python built in help is always the most up to date._
+#### `Classes`
+* [Cue Class](https://github.com/superkabuki/threefive3/blob/main/cue.md)  Cue is the main SCTE-35 class to use. 
+* [Stream Class](https://github.com/superkabuki/threefive3/blob/main/stream.md)  The Stream class handles MPEGTS SCTE-35 streams local, Http(s), UDP, and Multicast.
+* * The python built in help is always the most up to date docs for the library.
 
 ```rebol
 a@fu:~/build7/threefive3$ pypy3
@@ -67,10 +51,17 @@ Type "help", "copyright", "credits" or "license" for more information.
 >>>> help(Stream)
 ```
 
+#### `| more`
+
+* [Online SCTE-35 Parser](https://iodisco.com/scte35)  Supporte Base64, Bytes,Hex,Int, Json, Xml, and Xml+binary. __Damn__.
+
+* [Encode SCTE-35](https://github.com/superkabuki/threefive3/blob/main/encode.md) Some encoding code examples. 
+
+* [FFmpeg SCTE35](https://github.com/superkabuki/FFmpeg_SCTE35) FFmpeg with the SuperKabui SCTE-35 Patch applied. __Hell yes.__
+
 ___
 
-
-# `Install`
+### `Install`
 * python3 via pip
 ```rebol
 python3 -mpip install threefive3
@@ -88,10 +79,10 @@ make install
 ___
 
 
-# `The Cli tool`
+### `The Cli tool`
 
 
-### The cli tool installs automatically with pip or the Makefile.
+#### The cli tool installs automatically with pip or the Makefile.
 
 * [__SCTE-35 Inputs__](#inputs)
 * [__SCTE-35 Outputs__](#outputs)
@@ -101,7 +92,7 @@ ___
 * [Display raw __SCTE-35 packets__ from __video streams__](#packets)
 * [__Repair SCTE-35 streams__ changed to __bin data__ by __ffmpeg__](#sixfix)
 
-# `Inputs`
+#### `Inputs`
 
 * Most __inputs__ are __auto-detected.__ 
 * __stdin__ is __auto selected__ and __auto detected.__
@@ -152,7 +143,7 @@ threefive3 '/DAWAAAAAAAAAP/wBQb+ztd7owAAdIbbmw=='
 |               |                                                                                                                                                    |
 
 
-### Outputs
+#### Outputs
 * output type is determined by the key words __base64, bytes, hex, int, json, xml, and xmlbin__.
 * __json is the default__.
 * __Any input (except HLS,) can be returned as any output__
@@ -169,55 +160,55 @@ threefive3 '/DAWAAAAAAAAAP/wBQb+ztd7owAAdIbbmw=='
 | Xml         |                                                                                                                                                                                                                                                                                                                                                                                                                        `threefive3 '/DAsAAAAAyiYAP/wCgUAAAABf1+ZmQEBABECD0NVRUkAAAAAf4ABADUAAC2XQZU=' xml `                                                                                 `         |
 | Xml+bin     |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        `threefive3 0xfc301600000000000000fff00506fed605225b0000b0b65f3b xmlbin   `      |`
 
-### `hls`
+#### `hls`
 * parse hls manifests and segments for SCTE-35
 ```smalltalk
 threefive3 hls https://example.com/master.m3u8
 ```
 ___
-### `Iframes`
+#### `Iframes`
 * Show iframes PTS in an MPEGTS video
 
 ```smalltalk
 threefive3 iframes https://example.com/video.ts
 ```
 ___
-### `packets`   
+#### `packets`   
 * Print raw SCTE-35 packets from multicast mpegts video
 
 ```smalltalk
 threefive3 packets udp://@235.35.3.5:3535
 ```
 ___
-### `proxy`   
+#### `proxy`   
 * Parse a https stream and write raw video to stdout
 
 ```smalltalk
 threefive3 proxy video.ts
 ```
 ___
-### `pts`    
+#### `pts`    
 * Print PTS from mpegts video
 
 ```smalltalk
 threefive3 pts video.ts
 ```
 ___
-### `sidecar`  
+#### `sidecar`  
 * Parse a stream, write pts,write SCTE-35 Cues to sidecar.txt
 
 ```smalltalk
 threefive3 sidecar video.ts
 ```
 ___
-### `sixfix`  
+#### `sixfix`  
 * Fix SCTE-35 data mangled by ffmpeg
 
 ```smalltalk
 threefive3 sixfix video.ts
 ```
 ___
-### `show`  
+#### `show`  
 
 * Probe mpegts video _( kind of like ffprobe )_
 
@@ -225,14 +216,14 @@ ___
  threefive3 show video.ts
 ```
 ___
-### `version`     
+#### `version`     
 * Show version
 
 ```smalltalk
  threefive3 version
 ```
 ___
-### `help`        
+#### `help`        
 * Help
 ```rebol
  threefive3 help
@@ -243,7 +234,7 @@ ___
 
 ___
 
-## [iodisco.com/scte35](https://iodisco.com/scte35)
+### [iodisco.com/scte35](https://iodisco.com/scte35)
 ![image](https://github.com/user-attachments/assets/4df85c44-a078-4da0-97e2-5daefcf2509d)
 
 
