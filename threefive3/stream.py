@@ -6,7 +6,7 @@ import sys
 
 from functools import partial
 from .new_reader import reader
-from .stuff import print2
+from .stuff import print2,blue
 from .cue import Cue
 from .packetdata import PacketData
 from .streamtypes import streamtype_map
@@ -57,7 +57,7 @@ class ProgramInfo:
             vee = f"{hex(vee)}\t{streamtype_map[vee]}"
         else:
             vee = f"{vee} Unknown"
-        print2(f"\t  {k} [{hex(k)}]\t{vee}")
+        print2(f"\t\t{k} [{hex(k)}]\t{vee}")
 
     def show(self):
         """
@@ -66,15 +66,15 @@ class ProgramInfo:
         """
         serv = self.service.decode(errors="ignore")
         prov = self.provider.decode(errors="ignore")
-        print2("")
-        print2(f"\tService:  {serv}")
-        print2(f"\tProvider: {prov}")
-        print2(f"\tPid:      {self.pid}")
-        print2(f"\tPcr Pid:  {self.pcr_pid}")
+       # print2("")
+        print2(f"\tService:  {serv}\n\tProvider: {prov}")
+        print2(f"\tPMT PID:  {self.pid}\n\tPCR PID:  {self.pcr_pid}")
         print2("\tStreams:")
         # sorted_dict = {k:my_dict[k] for k in sorted(my_dict)})
         keys = sorted(self.streams)
-        print2("\t  Pid\t\tType")
+        print2("\t\tPID:\t\tType:")
+        print2("\t \t"+"-"*44)
+        
         for k in keys:
             self._mk_vee(k)
 
@@ -263,9 +263,11 @@ class Stream:
         func can be set to a custom function that accepts
         a threefive3.Cue instance as it's only argument.
         """
-        num_pkts =  1400
+        num_pkts = 1400
         for chunk in self.iter_pkts(num_pkts=num_pkts):
+          #  chunky = memoryview(bytearray(chunk))
             self._decode2cues(chunk, func)
+            #chunky.release()
         return False
 
     def decode_next(self):
@@ -318,7 +320,7 @@ class Stream:
         self.info = True
         for pkt in self.iter_pkts():
             self._parse(pkt)
-            if self.pmt_count > 20:
+            if self.pmt_count > 10:
                 break
         if self.maps.prgm.keys():
             sopro = sorted(self.maps.prgm.items())
@@ -326,7 +328,7 @@ class Stream:
                 #  if len(vee.streams.items()) > 0:
                 print2(f"\nProgram: {k}")
                 vee.show()
-                return True
+            return True
 
     def show_pts(self):
         """
@@ -387,7 +389,7 @@ class Stream:
             return b""
         while bites[0] == pad:
             bites = bites[1:]
-        return  self._unpad2(bites)
+        return self._unpad2(bites)
 
     def _unpad2(self, bites):
         pad = 255
@@ -440,19 +442,18 @@ class Stream:
         """
         head_size = 4
         if self._afc_flag(pkt[3]):
-            pkt=pkt[:4] + self._unpad(pkt[4:])
+            pkt = pkt[:4] + self._unpad(pkt[4:])
             afl = pkt[4]
             head_size += afl + 1  # +1 for afl byte
         return pkt[head_size:]
 
     def _pmt_pid(self, pay, pid):
-        if pid in self.pids.pmt:
-            self.pmt_count += 1
-            if pay in self.pmt_payloads:
-                if self.pmt_count > 3:
+        self.pmt_count += 1
+        if pay in self.pmt_payloads:
+            if self.pmt_count > 2:
                     return
-            self.pmt_payloads.add(pay)
-            self._parse_pmt(pay, pid)
+        self.pmt_payloads.add(pay)
+        self._parse_pmt(pay, pid)
 
     def _pat_pid(self, pay, pid):
         if pid == self.pids.PAT_PID:
@@ -469,7 +470,9 @@ class Stream:
         based on pid of the pkt
         """
         pay = self._parse_payload(pkt)
-        self._pmt_pid(pay, pid)
+        if pid in self.pids.pmt:
+            self._pmt_pid(pay, pid)
+            return
         if not self._same_as_last(pay, pid):
             self._pat_pid(pay, pid)
             self._sdt_pid(pay, pid)
@@ -501,7 +504,7 @@ class Stream:
     def _parse(self, pkt):
         pid = self._parse_info(pkt)
         if pid in self.pids.pcr:
-        #    self._chk_pcr(pkt, pid)
+            #    self._chk_pcr(pkt, pid)
             self._chk_pts(pkt, pid)
         return self._chk_scte35(pkt, pid)
 
