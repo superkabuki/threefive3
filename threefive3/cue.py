@@ -1,5 +1,5 @@
 """
-scte35.Cue Class
+threefive3.Cue Class
 """
 
 from base64 import b64decode, b64encode
