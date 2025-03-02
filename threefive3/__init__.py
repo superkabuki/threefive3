@@ -9,7 +9,7 @@ from .hlstags import TagParser
 from .section import SpliceInfoSection
 from .segment import Segment
 from .stream import Stream
-from .stuff import print2, iso8601, atohif,red,blue
+from .stuff import print2, iso8601, atohif ,red, blue
 from .superkabuki import SuperKabuki
 from .version import version
 
