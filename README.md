@@ -1,4 +1,4 @@
-[Install](#install) |[SCTE-35 Cli](#the-cli-tool) |[SCTE-35 Xml ](https://github.com/superkabuki/threefive3/blob/main/xml.md) | [Cue Class](https://github.com/superkabuki/threefive3/blob/main/cue.md) | [Stream Class](https://github.com/superkabuki/threefive3/blob/main/stream.md) | [Online SCTE-35 Parser](https://iodisco.com/scte35) | [Encode SCTE-35](https://github.com/superkabuki/threefive3/blob/main/encode.md) | [FFmpeg SCTE35](https://github.com/superkabuki/FFmpeg_SCTE35)
+[Install threefive3](#install) |[SCTE-35 Cli](#the-cli-tool) |[SCTE-35 Xml ](https://github.com/superkabuki/threefive3/blob/main/xml.md) | [SCTE-35 HLS](https://github.com/superkabuki/threefive3/blob/main/hls.md) | [Cue Class](https://github.com/superkabuki/threefive3/blob/main/cue.md) | [Stream Class](https://github.com/superkabuki/threefive3/blob/main/stream.md) | [Online SCTE-35 Parser](https://iodisco.com/scte35) | [Encode SCTE-35](https://github.com/superkabuki/threefive3/blob/main/encode.md) | [FFmpeg SCTE35](https://github.com/superkabuki/FFmpeg_SCTE35)
 
 # threefive3 SCTE-35 cli super tool and python3 library.
 > Brought to you by the fine folks at fu-corp _( Adrian and the two blonde Chinese girls. )_
@@ -39,6 +39,10 @@ Type "help", "copyright", "credits" or "license" for more information.
 
 * [SCTE-35 Cli Super Tool](#the-cli-tool) Encodes, Decodes, and Recodes. This is pretty cool, it does SCTE-35 seven different ways.
      * The cli tool comes with builtin documentation just type `threefive3 help`
+
+### HLS
+* [Advanced Parsing of SCTE-35 in HLS with threefive3](https://github.com/superkabuki/threefive3/blob/main/hls.md) All HLS SCTE-35 tags, Sidecar Files, AAC ID3 Header Timestamps, SCTE-35 filters and more.
+
 
 #### Xml
 
@@ -244,9 +248,7 @@ ___
 ```
 ___
 
-![image](https://github.com/user-attachments/assets/91fd37c2-746c-498d-8c6c-80c6e7760c0e)
 
-___
 
 ### [iodisco.com/scte35](https://iodisco.com/scte35)
 ![image](https://github.com/user-attachments/assets/4df85c44-a078-4da0-97e2-5daefcf2509d)
@@ -255,7 +257,4 @@ ___
 
 ___
 
-[Install](#install) |[SCTE-35 Cli](#the-cli-tool) |[SCTE-35 Xml ](https://github.com/superkabuki/threefive3/blob/main/xml.md) | [Cue Class](https://github.com/superkabuki/threefive3/blob/main/cue.md) | [Stream Class](https://github.com/superkabuki/threefive3/blob/main/stream.md) | [Online SCTE-35 Parser](https://iodisco.com/scte35) | [Encode SCTE-35](https://github.com/superkabuki/threefive3/blob/main/encode.md) | [FFmpeg SCTE35](https://github.com/superkabuki/FFmpeg_SCTE35)
-
-
-
+[Install threefive3](#install) |[SCTE-35 Cli](#the-cli-tool) |[SCTE-35 Xml ](https://github.com/superkabuki/threefive3/blob/main/xml.md) | [SCTE-35 HLS](https://github.com/superkabuki/threefive3/blob/main/hls.md) | [Cue Class](https://github.com/superkabuki/threefive3/blob/main/cue.md) | [Stream Class](https://github.com/superkabuki/threefive3/blob/main/stream.md) | [Online SCTE-35 Parser](https://iodisco.com/scte35) | [Encode SCTE-35](https://github.com/superkabuki/threefive3/blob/main/encode.md) | [FFmpeg SCTE35](https://github.com/superkabuki/FFmpeg_SCTE35)
