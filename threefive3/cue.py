@@ -52,11 +52,11 @@ class Cue(SCTE35Base):
         self.info_section = SpliceInfoSection()
         self.bites = None
         if data:
-            self.bites = self._mk_bits(data)
-           # self.decode()
+            self.bites=self._mk_bits(data)
         self.packet_data = packet_data
         self.dash_data = None
         self.decode()
+
 
     def __repr__(self):
         return str(self.__dict__)
@@ -187,6 +187,14 @@ class Cue(SCTE35Base):
                 return hex_bits
         return self._b64_bits(data)
 
+    def _pkt_bits(self,data):
+        """
+        _pkt_bits parse raw mpegts SCTE-35 packet
+        """
+        if data.startswith(b'G'):
+            return  data.split(b'\x00\x00\x01\xfc',1)[-1]
+        return data
+    
     def _mk_bits(self, data):
         """
         cue._mk_bits Converts
@@ -200,14 +208,15 @@ class Cue(SCTE35Base):
             self.load(data.mk())
             return self.bites
         if isinstance(data, bytes):
-            bites = self.idxsplit(data, b"\xfc")
+            data=self._pkt_bits(data)
+            bites = self.idxsplit(data,b"\xfc")
+            return bites
         if isinstance(data, int):
-            bites = self._int_bits(data)
+            return self._int_bits(data)
         if isinstance(data, str):
-            bites = self._str_bits(data)
-        self.bites = bites
-        self.decode()
-        return bites
+            return  self._str_bits(data)
+  #      self.bites = bites
+    #    return bites
 
     def _mk_descriptors(self, bites):
         """
@@ -296,12 +305,24 @@ class Cue(SCTE35Base):
         self.encode()
         return int.from_bytes(self.bites, byteorder="big")
 
+    def encode_as_int(self):
+        """
+        encode_as_int backward compatibility
+        """
+        return self.int()
+
     def hex(self):
         """
         hex returns self.bites as
         a hex string
         """
         return hex(self.int())
+
+    def encode_as_hex(self):
+        """
+        encode_as_hex backward compatibility
+        """
+        return self.hex()
 
     def _encode_crc(self):
         """
