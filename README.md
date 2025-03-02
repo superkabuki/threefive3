@@ -41,7 +41,7 @@ Type "help", "copyright", "credits" or "license" for more information.
      * The cli tool comes with builtin documentation just type `threefive3 help`
 
 ### HLS
-* [Advanced Parsing of SCTE-35 in HLS with threefive3](https://github.com/superkabuki/threefive3/blob/main/hls.md) All HLS SCTE-35 tags, Sidecar Files, AAC ID3 Header Timestamps, SCTE-35 filters and more.
+* [Advanced Parsing of SCTE-35 in HLS with threefive3](https://github.com/superkabuki/threefive3/blob/main/hls.md) All HLS SCTE-35 tags, Sidecar Files, AAC ID3 Header Timestamps, SCTE-35 filters Who loves you baby?
 
 
 #### Xml
