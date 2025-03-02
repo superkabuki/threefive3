@@ -320,7 +320,7 @@ class Stream:
         self.info = True
         for pkt in self.iter_pkts():
             self._parse(pkt)
-            if self.pmt_count > 10:
+            if self.pmt_count > 11:
                 break
         if self.maps.prgm.keys():
             sopro = sorted(self.maps.prgm.items())
@@ -450,7 +450,7 @@ class Stream:
     def _pmt_pid(self, pay, pid):
         self.pmt_count += 1
         if pay in self.pmt_payloads:
-            if self.pmt_count > 2:
+            if self.pmt_count > 11:
                     return
         self.pmt_payloads.add(pay)
         self._parse_pmt(pay, pid)
