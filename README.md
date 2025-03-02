@@ -30,6 +30,28 @@ Type "help", "copyright", "credits" or "license" for more information.
 >>>> strm.decode()
 ```
 
+
+
+## Q. `Where are you going with threefive3?`
+
+#### A. The master plan for threefive3 is to consolidate code from several of my projects.<BR>
+here's the status.<BR>
+        
+| Project         |  Description                           | merged? |
+|-----------------|---------------------------------------|----------|
+| threefive       | scte-35 parser                         |  Yes    |
+| bitn            | bitslicer for byte strings             |  Yes    |
+| new_reader      | reader for files and network data      |  Yes    |
+| showcues        | hls scte35 parser                      |  Yes    |
+| m3ufu tagparser | hls scte-35 tag parser                 |  Yes    |
+| iframes         | iframe detection for mpegts            |  Yes    |
+| dash rip rock   | scte-35 xml parser and generator       |  Yes    |
+| six2scte35      | ffmpeg bin data stream back to scte-35 |  Yes    |
+| superkabuki     | scte-35 packet injection              |  No      |
+| sideways        | hls scte-35 tag injecton              |  No      |
+| gums            | multicast server                      |  No      |
+| adbreak3        | fast cli scte-35 cue creation         |  No      |
+
 # `Documentation`
 
 
