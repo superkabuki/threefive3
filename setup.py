@@ -13,12 +13,13 @@ setuptools.setup(
     version=version,
     author="Adrian of Doom",
     author_email="spam@iodisco.com",
-    description="threefive continued.",
+    description="SCTE-35 decoder and encoder with MPEGTS and HLS and XML support.",
     long_description=readme,
     long_description_content_type="text/markdown",
-    url="https://github.com/superkabuki/scte35",
+    url="https://github.com/superkabuki/threefive3",
     install_requires=[
         "pyaes",
+        "gums",
     ],
 
     scripts=['bin/threefive3'],
@@ -37,4 +38,3 @@ setuptools.setup(
     ],
     python_requires=">=3.6",
 )
-
