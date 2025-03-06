@@ -8,6 +8,7 @@ scte35 command line SCTE35 decoder.
 
 import select
 import sys
+from gums import cli as gumscli
 from threefive3.iframes import IFramer
 from threefive3.new_reader import reader
 from threefive3 import Cue, Stream, print2,blue, version, red
@@ -15,6 +16,9 @@ from threefive3.hls import cli as hlscli
 from threefive3.sixfix import sixfix
 import cProfile
 # from sideways import cli as sidecli
+from threefive3.stuff import write2
+
+write2=False
 
 REV = "\033[7;1m"
 NORM = "\033[27m\033[0m"
@@ -360,7 +364,16 @@ def chk_funk_map():
     sys.exit()
 
 
+def chk_mcast():
+    if 'mcast' in sys.argv:
+        sys.argv.remove('mcast')
+        gumscli()
+        sys.exit()
+
+        
+
 def go():
+    chk_mcast()
     if len(sys.argv) < 2:
         sys.argv.append("json")
     chk_print_map()
