@@ -5,7 +5,7 @@ Super Kabuki - SCTE-35 Packet injection
 
 from collections import deque
 from operator import itemgetter
-from new_reader import reader
+from .new_reader import reader
 from iframes import IFramer
 from .stream import Stream
 from .cue import Cue
