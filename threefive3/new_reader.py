@@ -7,9 +7,22 @@ import socket
 import struct
 import sys
 import urllib.request
-
+from .stuff import blue
 
 TIMEOUT = 60
+
+
+class Socked(socket.socket):
+    """
+    Socked class subclasses socket.socket
+    and defines a read() method to maintain the interface.
+    """
+
+    def read(self, bites):
+        """
+        read is an alias for socket.socket.recv
+        """
+        return self.recv(bites)
 
 
 def reader(uri, headers={}):
@@ -58,45 +71,34 @@ def reader(uri, headers={}):
     return open(uri, "rb")
 
 
-def _read_stream(sock):
-    """
-    return a socket that can be read like a file.
-    """
-    return sock.makefile(mode="rb")
+def lshiftbuf(socked):
+    shift = 2
+    rcvbuf_size = socked.getsockopt(socket.SOL_SOCKET, socket.SO_RCVBUF)
+    try:
+        rcvbuf_size = rcvbuf_size << shift
+        socked.setsockopt(socket.SOL_SOCKET, socket.SO_RCVBUF, rcvbuf_size)
+        blue(f" socket.SO_RCVBUF left shifted  to {rcvbuf_size}")
+    except:
+        blue("Unable to left shift socket.SO_RCVBUF")
 
 
-def double_rcvbuf(sock):
-    """
-    double_rcvbuf doubles socket.SO_RCVBUF
-    until it errors
-    """
-    rcvbuf_size = sock.getsockopt(socket.SOL_SOCKET, socket.SO_RCVBUF)
-    print(f"\nReading rcvbuf_size of {rcvbuf_size}", file=sys.stderr)
-    while True:
-        try:
-            rcvbuf_size += rcvbuf_size
-            sock.setsockopt(socket.SOL_SOCKET, socket.SO_RCVBUF, rcvbuf_size)
-        except:
-            print(f"Setting rcvbuf_size to {rcvbuf_size}\n\n", file=sys.stderr)
-            break
-
-
-def _mk_sock():
-    sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM, socket.IPPROTO_UDP)
-    double_rcvbuf(sock)
-    sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+def _mk_socked():
+    socked = Socked(socket.AF_INET, socket.SOCK_DGRAM, socket.IPPROTO_UDP)
+    lshiftbuf(socked)
+    socked.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
     if hasattr(socket, "SO_REUSEPORT"):
-        sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEPORT, 1)
-    return sock
+        socked.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEPORT, 1)
+    socked.settimeout(TIMEOUT)
+    return socked
 
 
 def _mk_udp_sock(udp_ip, udp_port):
     """
     udp socket setup
     """
-    udp_sock = _mk_sock()
+    udp_sock = _mk_socked()
     udp_sock.bind((udp_ip, udp_port))
-    return _read_stream(udp_sock)
+    return udp_sock
 
 
 def _open_udp(uri):
@@ -112,15 +114,10 @@ def _open_mcast(uri):
     """
     udp://@227.1.3.10:4310
     """
-
-    class Socked(socket.socket):
-        def read(self, bites):
-            return self.recv(bites)
-
     interface_ip = "0.0.0.0"
     multicast_group, port = (uri.split("udp://@")[1]).rsplit(":", 1)
     multicast_port = int(port)
-    socked = Socked(socket.AF_INET, socket.SOCK_DGRAM, socket.IPPROTO_UDP)
+    socked = _mk_socked()
     socked.setsockopt(socket.IPPROTO_IP, socket.IP_MULTICAST_TTL, struct.pack("b", 32))
     socked.bind(("", multicast_port))
     socked.setsockopt(
@@ -128,5 +125,4 @@ def _open_mcast(uri):
         socket.IP_ADD_MEMBERSHIP,
         socket.inet_aton(multicast_group) + socket.inet_aton(interface_ip),
     )
-    socked.settimeout(TIMEOUT)
     return socked
