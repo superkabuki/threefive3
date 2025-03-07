@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-scte35.hls  hls.py
+threefive3.hls  hls.py
 (replaces showcues)
 
 """
@@ -14,7 +14,7 @@ from .hlstags import TagParser, HEADER_TAGS
 from .segment import Segment
 from .cue import Cue
 from .new_reader import reader
-from .stuff import atohif, iso8601, print2, red,blue
+from .stuff import atohif, iso8601, print2, red, blue
 
 
 REV = "\033[7m"
@@ -52,7 +52,7 @@ class Scte35Profile:
         # Which  Splice Descriptors tags to parse.
         self.descriptor_tags = [
             2,
-        ] 
+        ]
         # Which Descriptor Segmentation Types IDs should be parsed
         self.starts = [0x22, 0x30, 0x32, 0x34, 0x36, 0x44, 0x46]
         self.seg_type = 0x23
@@ -562,8 +562,7 @@ class HlsParser:
         invalid print invalid SCTE-35 HLS tags
         """
         self.clear()
-        blue(
-            f"\n{iso8601()}{REV} Skipped {NORM}  {line}\n")
+        blue(f"\n{iso8601()}{REV} Skipped {NORM}  {line}\n")
         print(f"{self.pts_stuff()}{NSUB}{self.media_stuff()}\n")
         return "## " + line
 
