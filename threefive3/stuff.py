@@ -1,7 +1,7 @@
 """
 stuff.py functions and such common to threefive3.
 
-print2, atohif, and iso8601
+print2, atohif, iso8601, red, blue
 """
 
 import datetime
@@ -60,5 +60,5 @@ def blue(message):
     blue  print info messages in blue to stderr.
 
     """
-    mesg = f"  \033[107;34m {message} \033[0m\n"
+    mesg = f"\033[34;107m{message} \033[0m\n"
     print2(mesg)
