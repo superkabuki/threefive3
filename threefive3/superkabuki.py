@@ -2,7 +2,8 @@
 Super Kabuki - SCTE-35 Packet injection
 
 """
-
+import argparse
+import sys
 from collections import deque
 from operator import itemgetter
 from .new_reader import reader
@@ -12,6 +13,7 @@ from .cue import Cue
 from .stuff import print2
 from .crc import crc32
 from .bitn import NBin
+from .commands import TimeSignal
 
 
 REV = "\033[7m"
