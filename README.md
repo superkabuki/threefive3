@@ -31,26 +31,44 @@ Type "help", "copyright", "credits" or "license" for more information.
 ```
 
 
+# threefive3 Road Map.
 
-## Q. `Where are you going with threefive3?`
-
-#### A. The master plan for threefive3 is to consolidate code from several of my projects.<BR>
-here's the status.<BR>
+> The master plan for threefive3 is to consolidate code from several of my projects.
         
-| Project         |  Description                           | merged? |
+| Project         |  Description                           | Status |
 |-----------------|---------------------------------------|----------|
-| threefive       | scte-35 parser                         |  Yes    |
-| bitn            | bitslicer for byte strings             |  Yes    |
-| new_reader      | reader for files and network data      |  Yes    |
-| showcues        | hls scte35 parser                      |  Yes    |
-| m3ufu tagparser | hls scte-35 tag parser                 |  Yes    |
-| iframes         | iframe detection for mpegts            |  Yes    |
-| dash rip rock   | scte-35 xml parser and generator       |  Yes    |
-| six2scte35      | ffmpeg bin data stream back to scte-35 |  Yes    |
-| superkabuki     | scte-35 packet injection              |  No      |
+| threefive       | scte-35 parser                         |  Done    |
+| bitn            | bitslicer for byte strings             |  Done   |
+| new_reader      | reader for files and network data      |  Done   |
+| showcues        | hls scte35 parser                      |  Done    |
+| m3ufu tagparser | hls scte-35 tag parser                 |  Done    |
+| iframes         | iframe detection for mpegts            |  Done    |
+| dash rip rock   | scte-35 xml parser and generator       |  Done    |
+| six2scte35      | ffmpeg bin data stream back to scte-35 |  Done    |
+| superkabuki     | scte-35 packet injection              |  Next release      |
 | sideways        | hls scte-35 tag injecton              |  No      |
-| gums            | multicast server                      |  No      |
+| gums            | multicast server                      | Next release      |
 | adbreak3        | fast cli scte-35 cue creation         |  No      |
+
+
+# Little Help?
+
+ I could use a hand.with these <br>
+
+* Writing docs. Explain how to use threefive3.
+* Easy Examples. Light coding.
+* Unit Testing. light coding with some SCTE-35.
+* Pylint and PEP compliance. medium python knowledge.
+* Profiling and Benchmarking. Help make threefive3 faster.
+* Replacing setup tools. Using setup.py for packaging has been deprecated, medium python knowledge.
+* DASH parsing. I need somebody to explain the non-SCTE-35 parts of DASH to me.  
+
+ You don't have to be a master of python or SCTE-35,<BR> but helping will make you better at both.<BR>
+ __I value enthusiasm over skill, I can teach you what you don't know.__ <BR> 
+ Don't worry, I won't let you break anything, that's my job.
+
+If you want to get involved, just open an issue and we can talk about it. 
+
 
 # `Documentation`
 
@@ -92,12 +110,10 @@ ___
 #### `| more`
 
 * [Online SCTE-35 Parser](https://iodisco.com/scte35)  Supporte Base64, Bytes,Hex,Int, Json, Xml, and Xml+binary.
-    * __Damn__.
 
 * [Encode SCTE-35](https://github.com/superkabuki/threefive3/blob/main/encode.md) Some encoding code examples. 
 
 * [FFmpeg SCTE35](https://github.com/superkabuki/FFmpeg_SCTE35) FFmpeg with the SuperKabui SCTE-35 Patch applied.
-   * __Hell Yes.__
 
 ___
 
