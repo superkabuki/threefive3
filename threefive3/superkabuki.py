@@ -6,7 +6,7 @@ Super Kabuki - SCTE-35 Packet injection
 from collections import deque
 from operator import itemgetter
 from .new_reader import reader
-from iframes import IFramer
+from .iframes import IFramer
 from .stream import Stream
 from .cue import Cue
 from .stuff import print2
@@ -45,19 +45,75 @@ class SuperKabuki(Stream):
         self.sidecar = deque()
         self.sidecar_file = "sidecar.txt"
         self.time_signals = False
+        self._parse_args()
+        super().__init__(self.infile)
 
-    def apply_args(self, args):
+    def _parse_args(self):
+        """
+        _parse_args parse command line args
+        """
+        parser = argparse.ArgumentParser()
+        parser.add_argument(
+            "-i",
+            "--input",
+            default=sys.stdin.buffer,
+            help=f""" Input source, like "/home/a/vid.ts"
+                                    or "udp://@235.35.3.5:3535"
+                                    or "https://futzu.com/xaa.ts"
+                                    [ default:{REV}sys.stdin.buffer{NORM} ]
+                                    """,
+        )
+
+        parser.add_argument(
+            "-o",
+            "--output",
+            default=sys.stdout.buffer,
+            help=f"Output file  [ default:{REV}sys.stdout.buffer{NORM} ]",
+        )
+
+        parser.add_argument(
+            "-s",
+            "--sidecar",
+            default="sidecar.txt",
+            help=f"Sidecar file for SCTE35 [ default:{REV}sidecar.txt{NORM} ]",
+        )
+        parser.add_argument(
+            "-p",
+            "--scte35_pid",
+            default="0x86",
+            #type=int,
+            help=f"Pid for SCTE-35 packets [ default:{REV}0x86{NORM} ]",
+        )
+        parser.add_argument(
+            "-t",
+            "--time_signals",
+            action="store_const",
+            default=False,
+            const=True,
+            help="Flag to insert Time Signal cues at iframes.",
+        )
+        parser.add_argument(
+            "-v",
+            "--version",
+            action="store_const",
+            default=False,
+            const=True,
+            help="Show version",
+        )
+
+        args = parser.parse_args()
+        self._apply_args(args)
+
+    def _apply_args(self, args):
         """
         _apply_args applies command line args
         """
-        self.infile = args["input"]
-
-        self.outfile = f'superkabuki-{self.infile.rsplit("/")[-1]}'
-        self.sidecar_file = args["sidecar"]
-        self._tsdata = reader(args["input"])
-        self.pid2int(args["scte35_pid"])
-        # self.time_signals = args.time_signals
-        super().__init__(self.infile)
+        self.outfile = args.output
+        self.infile = args.input
+        self.sidecar_file = args.sidecar
+        self._tsdata = reader(args.input)
+        self.pid2int(args.scte35_pid)
+        self.time_signals = args.time_signals
 
     def pid2int(self, pid):
         """
@@ -125,6 +181,14 @@ class SuperKabuki(Stream):
             pkt = pkt + (pad * pad_size)
         return pkt
 
+    def auto_time_signals(self,pts,outfile):
+        """
+        auto_time_signals auto add
+        timesignals for every iframe.
+        """
+        if self.time_signals:
+            outfile.write(self._gen_time_signal(pts))
+
     def add_scte35_pkt(self, pts, out_file):
         """
         add_scte35_pkt
@@ -159,9 +223,34 @@ class SuperKabuki(Stream):
             for pkt in self.iter_pkts():
                 pts = self.iframer.parse(pkt)  # insert on iframe
                 if pts:
+                    self.auto_time_signals(pts,outfile)
                     self.load_sidecar(pts)
                     self.add_scte35_pkt(pts, outfile)
                 outfile.write(self.parse_pkt(pkt))
+
+    def _gen_time_signal(self, pts):
+        cue = Cue()
+        cue.command = TimeSignal()
+        cue.command.time_specified_flag = True
+        cue.command.pts_time = pts
+        cue.encode()
+        cue.decode()
+        nbin = NBin()
+        nbin.add_int(71, 8)  # sync byte
+        nbin.add_flag(0)  # tei
+        nbin.add_flag(1)  # pusi
+        nbin.add_flag(0)  # tp
+        nbin.add_int(self.scte35_pid, 13)
+        nbin.add_int(0, 2)  # tsc
+        nbin.add_int(1, 2)  # afc
+        nbin.add_int(self.scte35_cc, 4)  # cont
+        nbin.add_bites(b"\x00")
+        nbin.add_bites(cue.bites)
+        pad_size = 188 - len(nbin.bites)
+        padding = b"\xff" * pad_size
+        nbin.add_bites(padding)
+        self._bump_cc()
+        return nbin.bites
 
     def load_sidecar(self, pts):
         """
@@ -313,3 +402,14 @@ class SuperKabuki(Stream):
         """
         if stream_type in ["0x6", "0x86"]:
             self.pids.scte35.add(pid)
+
+
+
+def cli():
+    """
+    cli handles all the command line args
+    and such.
+
+    """
+    sk = SuperKabuki()
+    sk.encode()
