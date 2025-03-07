@@ -7,12 +7,17 @@ print2, atohif, and iso8601
 import datetime
 from sys import stderr
 
+write2 = True
+
 
 def print2(gonzo=b""):
     """
     print2 prints to 2 aka stderr.
     """
-    print(gonzo, file=stderr, flush=True)
+    if write2:
+        print(gonzo, file=stderr, flush=True)
+    else:
+        print(gonzo)
 
 
 def atohif(value):
@@ -46,8 +51,8 @@ def red(message):
     red  print error messages in red to stderr.
 
     """
-    print2(f"  \033[107;31m {message} \033[0m\n ")
-
+    mesg = f" \033[107;31m {message} \033[0m\n "
+    print2(mesg)
 
 
 def blue(message):
@@ -55,5 +60,5 @@ def blue(message):
     blue  print info messages in blue to stderr.
 
     """
-    print2(f"  \033[107;34m {message} \033[0m\n ")
-
+    mesg = f"  \033[107;34m {message} \033[0m\n"
+    print2(mesg)
