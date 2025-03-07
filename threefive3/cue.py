@@ -13,6 +13,19 @@ from .descriptors import splice_descriptor, descriptor_map
 from .crc import crc32
 from .xml import Node
 from .segmentation import table22
+from .words import (
+    minusone,
+    zero,
+    one,
+    two,
+    three,
+    four,
+    eight,
+    eleven,
+    fourteen,
+    sixteen,
+    equalsign,
+)
 from .x2c import xml2cue
 
 
@@ -74,7 +87,7 @@ class Cue(SCTE35Base):
             bites = self._set_splice_command(bites)
             bites = self._mk_descriptors(bites)
             if bites:
-                crc = hex(int.from_bytes(bites[0:4], byteorder="big"))
+                crc = hex(int.from_bytes(bites[zero:four], byteorder="big"))
                 self.info_section.crc = crc
                 return True
         return False
@@ -83,7 +96,7 @@ class Cue(SCTE35Base):
         """
         Cue._descriptor_loop parses all splice descriptors
         """
-        tag_n_len = 2
+        tag_n_len = two
         while len(loop_bites) > tag_n_len:
             spliced = splice_descriptor(loop_bites)
             if not spliced:
@@ -138,15 +151,15 @@ class Cue(SCTE35Base):
         """
         fix_bad_b64 fixes bad padding on Base64
         """
-        while len(data) % 4 != 0:
-            data = data + "="
+        while len(data) % four != zero:
+            data = data + equalsign
         return data
 
     def _int_bits(self, data):
         """
         _int_bits convert a SCTE-35 Cue from integer to bytes.
         """
-        length = data.bit_length() >> 3
+        length = data.bit_length() >> three
         bites = int.to_bytes(data, length, byteorder="big")
         return bites
 
@@ -155,14 +168,14 @@ class Cue(SCTE35Base):
         _hex_bits convert a SCTE-35 Cue from hex to bytes.
         """
         try:
-            i = int(data, 16)
-            i_len = i.bit_length() >> 3
+            i = int(data, sixteen)
+            i_len = i.bit_length() >> three
             bites = int.to_bytes(i, i_len, byteorder="big")
             return bites
         except (LookupError, TypeError, ValueError):
-            if data[:2].lower() == "0x":
-                data = data[2:]
-            if data[:2].lower() == "fc":
+            if data[:two].lower() == "0x":
+                data = data[two:]
+            if data[:two].lower() == "fc":
                 return bytes.fromhex(data)
         return b""
 
@@ -190,7 +203,7 @@ class Cue(SCTE35Base):
         _pkt_bits parse raw mpegts SCTE-35 packet
         """
         if data.startswith(b"G"):
-            return data.split(b"\x00\x00\x01\xfc", 1)[-1]
+            return data.split(b"\x00\x00\x01\xfc", one)[minusone]
         return data
 
     def _mk_bits(self, data):
@@ -226,9 +239,9 @@ class Cue(SCTE35Base):
         ##        if len(bites) < 2:
         ##            return False
         while bites:
-            dll = (bites[0] << 8) | bites[1]
+            dll = (bites[zero] << eight) | bites[one]
             self.info_section.descriptor_loop_length = dll
-            bites = bites[2:]
+            bites = bites[two:]
             self._descriptor_loop(bites[:dll])
             return bites[dll:]
 
@@ -238,7 +251,7 @@ class Cue(SCTE35Base):
         Splice Info Section
         of a SCTE35 cue.
         """
-        info_size = 14
+        info_size = fourteen
         info_bites = bites[:info_size]
         self.info_section.decode(info_bites)
         return bites[info_size:]
@@ -272,11 +285,11 @@ class Cue(SCTE35Base):
         self.info_section.splice_command_type = self.command.command_type
         # 11 bytes for info section + command + 2 descriptor loop length
         # + descriptor loop + 4 for crc
-        self.info_section.section_length = 11 + cmdl + 2 + dll + 4
+        self.info_section.section_length = eleven + cmdl + two + dll + four
         self.bites = self.info_section.encode()
         self.bites += cmd_bites
         self.bites += int.to_bytes(
-            self.info_section.descriptor_loop_length, 2, byteorder="big"
+            self.info_section.descriptor_loop_length, two, byteorder="big"
         )
         self.bites += dscptr_bites
 
@@ -329,7 +342,7 @@ class Cue(SCTE35Base):
         """
         crc_int = crc32(self.bites)
         self.info_section.crc = hex(crc_int)
-        self.bites += int.to_bytes(crc_int, 4, byteorder="big")
+        self.bites += int.to_bytes(crc_int, four, byteorder="big")
 
     def _unloop_descriptors(self):
         """
@@ -342,8 +355,8 @@ class Cue(SCTE35Base):
         dbite_chunks = [dsptr.encode() for dsptr in self.descriptors]
         for chunk, dsptr in zip(dbite_chunks, self.descriptors):
             dsptr.descriptor_length = len(chunk)
-            all_bites.add_int(dsptr.tag, 8)
-            all_bites.add_int(dsptr.descriptor_length, 8)
+            all_bites.add_int(dsptr.tag, eight)
+            all_bites.add_int(dsptr.descriptor_length, eight)
             all_bites.add_bites(chunk)
         return all_bites.bites
 
@@ -415,7 +428,7 @@ class Cue(SCTE35Base):
                 self.bites = self._int_bits(int(gonzo))
                 self.decode()
                 return self.bites
-            if gonzo.strip()[0] == "<":
+            if gonzo.strip()[zero] == "<":
                 self._from_xml(gonzo)
                 return self.bites
             gonzo = json.loads(gonzo)
