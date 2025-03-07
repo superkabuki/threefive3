@@ -52,11 +52,10 @@ class Cue(SCTE35Base):
         self.info_section = SpliceInfoSection()
         self.bites = None
         if data:
-            self.bites=self._mk_bits(data)
+            self.bites = self._mk_bits(data)
         self.packet_data = packet_data
         self.dash_data = None
         self.decode()
-
 
     def __repr__(self):
         return str(self.__dict__)
@@ -141,7 +140,6 @@ class Cue(SCTE35Base):
         """
         while len(data) % 4 != 0:
             data = data + "="
-        blue("bad base64 length fixed.\n ")
         return data
 
     def _int_bits(self, data):
@@ -187,14 +185,14 @@ class Cue(SCTE35Base):
                 return hex_bits
         return self._b64_bits(data)
 
-    def _pkt_bits(self,data):
+    def _pkt_bits(self, data):
         """
         _pkt_bits parse raw mpegts SCTE-35 packet
         """
-        if data.startswith(b'G'):
-            return  data.split(b'\x00\x00\x01\xfc',1)[-1]
+        if data.startswith(b"G"):
+            return data.split(b"\x00\x00\x01\xfc", 1)[-1]
         return data
-    
+
     def _mk_bits(self, data):
         """
         cue._mk_bits Converts
@@ -208,14 +206,15 @@ class Cue(SCTE35Base):
             self.load(data.mk())
             return self.bites
         if isinstance(data, bytes):
-            data=self._pkt_bits(data)
-            bites = self.idxsplit(data,b"\xfc")
+            data = self._pkt_bits(data)
+            bites = self.idxsplit(data, b"\xfc")
             return bites
         if isinstance(data, int):
             return self._int_bits(data)
         if isinstance(data, str):
-            return  self._str_bits(data)
-  #      self.bites = bites
+            return self._str_bits(data)
+
+    #      self.bites = bites
     #    return bites
 
     def _mk_descriptors(self, bites):
@@ -381,7 +380,7 @@ class Cue(SCTE35Base):
         a descriptor instance will be created.
         """
         if not isinstance(dlist, list):
-            red('descriptors should be a list')
+            red("descriptors should be a list")
         for dstuff in dlist:
             dscptr = descriptor_map[dstuff["tag"]]()
             dscptr.load(dstuff)
