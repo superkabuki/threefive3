@@ -6,7 +6,7 @@ threefive3.iframes
 import sys
 from functools import partial
 from .new_reader import reader
-from .stuff import print2
+from .stuff import print2, blue, red
 
 
 PKT_SIZE = 188
@@ -18,7 +18,8 @@ class IFramer:
 
     @staticmethod
     def _to90k(pts):
-        return round(pts / 90000.0, 6)
+        if pts:
+            return round(pts / 90000.0, 6)
 
     @staticmethod
     def _abc_flags(pkt):
@@ -57,7 +58,8 @@ class IFramer:
         if self._afc_flag(pkt):
             afl = pkt[4]
             head_size += afl + 1  # +1 for afl byte
-        return pkt[head_size:]
+        pay = pkt[head_size:]
+        return pay
 
     def _parse_pts(self, pkt):
         """
@@ -78,8 +80,10 @@ class IFramer:
     def _afc_approved(self, pkt):
         if self._pcr_flag(pkt):
             if self._rai_flag(pkt):
+                red("random access")
                 return True
         if self._abc_flags(pkt):
+            red("abc")
             return True
         return False
 
@@ -87,7 +91,12 @@ class IFramer:
         """
         _is_key is key frame detection.
         """
+        if b"\x00\x00\x01" in pkt:
+            idx = pkt.index(b"\x00\x00\x01")
+            if pkt[idx + 3 : idx + 4] in [b"\xe0", b"\xc0", b"\xbd"]:
+                return True
         if self._nal(pkt):
+            red("nal")
             return True
         if self._afc_flag(pkt):
             return self._afc_approved(pkt)
@@ -99,8 +108,8 @@ class IFramer:
             if self._is_key(pkt):
                 pts = self._parse_pts(pkt)
                 pts = self._to90k(pts)
-                if not self.shush:
-                    print2(pts)
+        #  if not self.shush and pts:
+        #    print2(pts)
         return pts
 
     def ticks(self, pkt):
