@@ -2,6 +2,7 @@
 hlstags.py
 
 """
+
 from .stuff import atohif
 
 
@@ -33,7 +34,6 @@ SEGMENT_TAGS = (
 )
 
 HEADER_TAGS = BASIC_TAGS + MULTI_TAGS + MEDIA_TAGS  # + SEGMENT_TAGS
-
 
 
 class TagParser:
@@ -168,4 +168,3 @@ class TagParser:
         except:
             tail = None
         return tail, value
-
