@@ -4,7 +4,19 @@ hlstags.py
 """
 
 from .stuff import atohif
-
+from .words import (
+    minusone,
+    zero,
+    one,
+    two,
+    equalsign,
+    comma,
+    colon,
+    space,
+    nothing,
+    dblquote,
+    octothorpe,
+)
 
 BASIC_TAGS = (
     "#EXTM3U",
@@ -69,12 +81,12 @@ class TagParser:
 
     @staticmethod
     def _strip_last_comma(tail):
-        if tail.endswith(","):
-            tail = tail[:-1]
+        if tail.endswith(comma):
+            tail = tail[:minusone]
         return tail
 
     def _oated(self, tag, line):
-        vee = line.split(",", 1)[0]
+        vee = line.split(comma, one)[zero]
         self.tags[tag] = vee
 
     def _parse_tags(self, line):
@@ -82,15 +94,15 @@ class TagParser:
         _parse_tags parses tags and
         associated attributes
         """
-        line = line.replace(" ", "")
+        line = line.replace(space, nothing)
         if not line:
             return
-        if line[0] != "#":
+        if line[zero] != octothorpe:
             return
-        if ":" not in line:
+        if colon not in line:
             self.tags[line] = None
             return
-        tag, tail = line.split(":", 1)
+        tag, tail = line.split(colon, one)
         self.tags[tag] = {}
         if tag == "#EXT-OATCLS-SCTE35":
             self._oated(tag, tail)
@@ -103,7 +115,7 @@ class TagParser:
         """
         while tail:
             tail = self._strip_last_comma(tail)
-            if "=" not in tail:
+            if equalsign not in tail:
                 self.tags[tag] = atohif(tail)
                 return
             tail, value = self._split_value(tag, tail)
@@ -116,14 +128,14 @@ class TagParser:
         """
         if not tail:
             return
-        splitup = tail.rsplit(",", 1)
-        if len(splitup) == 2:
+        splitup = tail.rsplit(comma, one)
+        if len(splitup) == two:
             tail, key = splitup
         else:
-            key = splitup[0]
+            key = splitup[zero]
             tail = None
-        if "=" in key:
-            key, value = key.split("=", 1)
+        if equalsign in key:
+            key, value = key.split(equalsign, one)
         self.tags[tag][key] = value
         return tail
 
@@ -132,7 +144,8 @@ class TagParser:
         _split_value does a right split
         off tail for the value in a key=value pair.
         """
-        if tail[-1:] == '"':
+        dblquote = '"'
+        if tail[minusone:] == dblquote:
             tail, value = self._quoted(tag, tail)
         else:
             tail, value = self._unquoted(tag, tail)
@@ -144,10 +157,10 @@ class TagParser:
         """
         value = None
         try:
-            tail, value = tail[:-1].rsplit('="', 1)
+            tail, value = tail[:minusone].rsplit(equalsign + dblquote, one)
         except:
             self.tags[tag]
-            value = tail.replace('"', "")
+            value = tail.replace(doublequote, nothing)
             tail = None
         return tail, value
 
@@ -157,12 +170,13 @@ class TagParser:
         """
         value = None
         hold = ""
+
         # = is only allowed as a suffix in base64
-        while tail.endswith("="):
-            hold += tail[-1]
-            tail = tail[:-1]
+        while tail.endswith(equalsign):
+            hold += tail[minusone]
+            tail = tail[:minusone]
         try:
-            tail, value = tail.rsplit("=", 1)
+            tail, value = tail.rsplit(equalsign, one)
             value += hold
             value = atohif(value)
         except:
