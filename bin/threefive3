@@ -8,17 +8,20 @@ scte35 command line SCTE35 decoder.
 
 import select
 import sys
-from gums import cli as gumscli
+from threefive3.gums import cli as gumscli
+from threefive3.superkabuki import cli as skcli
 from threefive3.iframes import IFramer
 from threefive3.new_reader import reader
-from threefive3 import Cue, Stream, print2,blue, version, red
+from threefive3 import Cue, Stream, print2, blue, version, red
 from threefive3.hls import cli as hlscli
 from threefive3.sixfix import sixfix
 import cProfile
+
 # from sideways import cli as sidecli
 from threefive3.stuff import write2
 
-write2=False
+
+write2 = False
 
 REV = "\033[7;1m"
 NORM = "\033[27m\033[0m"
@@ -34,12 +37,13 @@ class SupaStream(Stream):
     SupaStream is subclass of Stream used
     to print raw SCTE-35 packets.
     """
+
     def _parse_scte35(self, pkt, pid):
         print2(pkt)
         print2("")
         super()._parse_scte35(pkt, pid)
 
-        
+
 def mk_sidecar(cue):
     """
     mk_sidecar generates a sidecar file with the SCTE-35 Cues
@@ -325,8 +329,8 @@ def to_funk(this):
         try:
             cue.bites = cue._mk_bits(this)
             cue.decode()
-        except:
-            print2("Bad Data:\n")
+        except Error:
+            print2(Error)
             sys.exit()
     if cue:
         funk()(cue)  #   func works here too.
@@ -348,7 +352,7 @@ def chk_stdin(args):
             strm = Stream(sys.stdin.buffer)
             strm._parse(one + two)  # dont drop first packet
             strm.decode(func=funk())
-            sys.exit() # I keep forgetting why I do
+            sys.exit()  # I keep forgetting why I do
     return args
 
 
@@ -364,16 +368,27 @@ def chk_funk_map():
     sys.exit()
 
 
-def chk_mcast():
-    if 'mcast' in sys.argv:
-        sys.argv.remove('mcast')
-        gumscli()
-        sys.exit()
+# cli map
 
-        
+cli_map = {"mcast": gumscli, "superkabuki": skcli}
+
+
+def chk_cli_map():
+    """
+    chk_cli_map check if a
+    cli_map key is present in sys.argv,
+    pass control to the cli function.
+    """
+    for k, v in cli_map.items():
+        if k in sys.argv:
+            sys.argv[0] = f"{sys.argv[0]} {k}"
+            sys.argv.remove(k)
+            v()
+            sys.exit()
+
 
 def go():
-    chk_mcast()
+    chk_cli_map()
     if len(sys.argv) < 2:
         sys.argv.append("json")
     chk_print_map()
