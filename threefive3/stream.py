@@ -6,7 +6,7 @@ import sys
 
 from functools import partial
 from .new_reader import reader
-from .stuff import print2,blue
+from .stuff import print2, blue
 from .cue import Cue
 from .packetdata import PacketData
 from .streamtypes import streamtype_map
@@ -66,15 +66,15 @@ class ProgramInfo:
         """
         serv = self.service.decode(errors="ignore")
         prov = self.provider.decode(errors="ignore")
-       # print2("")
+        # print2("")
         print2(f"\tService:  {serv}\n\tProvider: {prov}")
         print2(f"\tPMT PID:  {self.pid}\n\tPCR PID:  {self.pcr_pid}")
         print2("\tStreams:")
         # sorted_dict = {k:my_dict[k] for k in sorted(my_dict)})
         keys = sorted(self.streams)
         print2("\t\tPID:\t\tType:")
-        print2("\t \t"+"-"*44)
-        
+        print2("\t \t" + "-" * 44)
+
         for k in keys:
             self._mk_vee(k)
 
@@ -265,9 +265,9 @@ class Stream:
         """
         num_pkts = 1400
         for chunk in self.iter_pkts(num_pkts=num_pkts):
-          #  chunky = memoryview(bytearray(chunk))
+            #  chunky = memoryview(bytearray(chunk))
             self._decode2cues(chunk, func)
-            #chunky.release()
+            # chunky.release()
         return False
 
     def decode_next(self):
@@ -320,7 +320,7 @@ class Stream:
         self.info = True
         for pkt in self.iter_pkts():
             self._parse(pkt)
-            if self.pmt_count > 11:
+            if self.pmt_count > 20:
                 break
         if self.maps.prgm.keys():
             sopro = sorted(self.maps.prgm.items())
@@ -451,7 +451,7 @@ class Stream:
         self.pmt_count += 1
         if pay in self.pmt_payloads:
             if self.pmt_count > 11:
-                    return
+                return
         self.pmt_payloads.add(pay)
         self._parse_pmt(pay, pid)
 
