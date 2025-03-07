@@ -81,9 +81,7 @@ class TagParser:
 
     @staticmethod
     def _strip_last_comma(tail):
-        if tail.endswith(comma):
-            tail = tail[:minusone]
-        return tail
+        return tail.rstrip(",")
 
     def _oated(self, tag, line):
         vee = line.split(comma, one)[zero]
@@ -170,7 +168,6 @@ class TagParser:
         """
         value = None
         hold = ""
-
         # = is only allowed as a suffix in base64
         while tail.endswith(equalsign):
             hold += tail[minusone]
