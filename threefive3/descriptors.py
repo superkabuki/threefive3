@@ -9,6 +9,7 @@ from .upids import upid_map
 from .xml import Node
 from .stuff import red
 
+
 def k_by_v(adict, avalue):
     """
     dict key lookup by value
