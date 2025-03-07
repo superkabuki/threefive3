@@ -18,7 +18,7 @@ from .stuff import atohif, iso8601, print2, red, blue
 
 
 REV = "\033[7m"
-NORM = "\033[27m"
+NORM = "\033[0m"
 SUB = "\t"
 NSUB = f"\n{SUB}"
 ROLLOVER = 95443.717678
@@ -61,7 +61,7 @@ class Scte35Profile:
 
     def __repr__(self):
         return "\n\n  ".join(
-            [f"\n{REV} Profile: {NORM}"]
+            [f"\n{REV} Profile {NORM}"]
             + [f"{REV} {k} {NORM} = {v}" for k, v in vars(self).items()]
         )
 
@@ -562,7 +562,7 @@ class HlsParser:
         invalid print invalid SCTE-35 HLS tags
         """
         self.clear()
-        blue(f"\n{iso8601()}{REV} Skipped {NORM}  {line}\n")
+        blue(f"{iso8601()}{REV}  Skipped  {NORM} {line}  ")
         print(f"{self.pts_stuff()}{NSUB}{self.media_stuff()}\n")
         return "## " + line
 
@@ -616,7 +616,7 @@ class HlsParser:
         if self.cue_state not in ["OUT", "CONT"] and not self.first_segment:
             return None
         if self.first_segment:
-            blue(f"{REV}Resuming Ad Break {NORM}{iso8601()}\n")
+            blue(f"{REV} Resuming Ad Break {NORM} {iso8601()}")
             self.cue_state = "CONT"
             self._set_break_timer(line, cont_tags)
             self._set_break_duration(line, cont_tags)
@@ -718,7 +718,7 @@ class HlsParser:
                     self.cue_state = "IN"
                     self.clear()
                     blue(
-                        f"{iso8601()}{REV} AUTO CUE-IN {NORM}{self.pts_stuff()}{self.diff_stuff()}{NSUB}{self.media_stuff()}\n"
+                        f"{iso8601()}{REV} AUTO CUE-IN {NORM}{self.pts_stuff()}{self.diff_stuff()}{NSUB}{self.media_stuff()}"
                     )
                     self.reset_break()
                     self.to_sidecar(self.pts, "#AUTO\n#EXT-X-CUE-IN\n")
@@ -863,7 +863,7 @@ class HlsParser:
             if self.sleep_duration == 0:
                 target_duration = atohif(line.split(":")[1])
                 self.sleep_duration = round(target_duration * 0.5, 3)
-                blue(f"{SUB}{REV} Target Duration {NORM} {target_duration}\n")
+                print(f"{REV} Target Duration {NORM} {target_duration}\n ")
 
     def _mk_window_size(self, lines):
         return len([line for line in lines if "#EXTINF:" in line])
@@ -878,7 +878,7 @@ class HlsParser:
         if not self.window_size:
             self.window_size = self._mk_window_size(lines)
             self.sliding_window.size = self.window_size
-            blue(f"{SUB}{REV} Window Size {NORM} {self.window_size}\n")
+            print(f"{REV} Window Size {NORM} {self.window_size}\n")
 
     def update_cue_state(self):
         """
@@ -1001,8 +1001,9 @@ class HlsParser:
         """
         pull m3u8 and parse it.
         """
-        blue(f"\n{SUB}{REV} Started {NORM} {iso8601()}\n")
-        blue(f"{SUB}{REV} Manifest {NORM} {self.rendition}\n")
+
+        blue(f"{REV}Selected Rendition {NORM} {self.rendition} ")
+        print(f"{REV} Parsing Started  {NORM} {iso8601()}\n")
         self.base_uri = self.rendition.rsplit("/", 1)[0]
         self.sliding_window = SlidingWindow()
         while self.reload:
@@ -1022,7 +1023,7 @@ class HlsParser:
                 base_url = uri.rsplit("/", 1)[0]
                 uri = base_url + "/" + line
                 uri.replace("\n", "")
-                blue(f"\t{REV}Rendition Found {NORM} {uri}")
+                print(f"{REV} Rendition Found {NORM} {uri} ")
         self.rendition = uri
 
     def find_renditions(self, uri):
@@ -1075,7 +1076,6 @@ def cli():
     print(hlsparser.prof)
     print("\n\n")
     time.sleep(0.3)
-    blue(f"{REV}    Parsing    {NORM}")
     manifest = sys.argv[1]
     hlsparser.find_renditions(manifest)
     hlsparser.pull()
@@ -1090,7 +1090,7 @@ helpme = """
 
     To display this help:
 
-	scte35 hls help
+	threefive3 hls help
 
 [ Input ]
 
