@@ -81,7 +81,7 @@ class SuperKabuki(Stream):
             "-p",
             "--scte35_pid",
             default="0x86",
-            #type=int,
+            # type=int,
             help=f"Pid for SCTE-35 packets [ default:{REV}0x86{NORM} ]",
         )
         parser.add_argument(
@@ -181,7 +181,7 @@ class SuperKabuki(Stream):
             pkt = pkt + (pad * pad_size)
         return pkt
 
-    def auto_time_signals(self,pts,outfile):
+    def auto_time_signals(self, pts, outfile):
         """
         auto_time_signals auto add
         timesignals for every iframe.
@@ -223,7 +223,7 @@ class SuperKabuki(Stream):
             for pkt in self.iter_pkts():
                 pts = self.iframer.parse(pkt)  # insert on iframe
                 if pts:
-                    self.auto_time_signals(pts,outfile)
+                    self.auto_time_signals(pts, outfile)
                     self.load_sidecar(pts)
                     self.add_scte35_pkt(pts, outfile)
                 outfile.write(self.parse_pkt(pkt))
@@ -402,7 +402,6 @@ class SuperKabuki(Stream):
         """
         if stream_type in ["0x6", "0x86"]:
             self.pids.scte35.add(pid)
-
 
 
 def cli():
