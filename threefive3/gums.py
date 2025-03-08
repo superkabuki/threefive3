@@ -20,6 +20,10 @@ DGRAM_SIZE = 1316
 DEFAULT_MULTICAST = "235.35.3.5:3535"
 
 
+REV = "\033[7m"
+NORM = "\033[27m"
+
+
 class GumS:
     """
     GumS class is the UDP Unicast/Multicast Sender
@@ -112,10 +116,11 @@ def parse_args():
     parser.add_argument(
         "-i",
         "--input",
-        default=None,
-        help="""like "/home/a/vid.ts"
+        default=sys.stdin.buffer,
+        help=f"""like "/home/a/vid.ts"
                 or "udp://@235.35.3.5:3535"
                 or "https://futzu.com/xaa.ts"
+                [ default:{REV}sys.stdin.buffer{NORM} ]
              """,
     )
 
@@ -123,21 +128,21 @@ def parse_args():
         "-a",
         "--addr",
         default=DEFAULT_MULTICAST,
-        help='Destination IP:Port like "227.1.3.10:4310"',
+        help=f'Destination IP:Port like "227.1.3.10:4310"  [ default:{REV} 235.35.3.5:3535 {NORM} ]',
     )
 
     parser.add_argument(
         "-b",
         "--bind_addr",
         default="0.0.0.0",
-        help='Local IP to bind to like "192.168.1.34". Default is 0.0.0.0',
+        help=f' Local IP to bind [ default:{REV}  0.0.0.0{NORM} ]',
     )
 
     parser.add_argument(
         "-t",
         "--ttl",
-        default=1,
-        help="Multicast TTL 1 - 255",
+        default=32,
+        help=f"Multicast TTL  between 1 and 255 [ default:{REV} 32 {NORM} ]",
     )
 
     parser.add_argument(
@@ -189,9 +194,6 @@ def cli():
     """
 
     args = parse_args()
-    if args.version:
-        print(version())
-        sys.exit()
     #  daemonize()
     ttl = int(args.ttl).to_bytes(1, byteorder="big")
     dest_addr = args.addr
