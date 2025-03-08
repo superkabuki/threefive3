@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-threefive3.hls  hls.py
+scte35.hls  hls.py
 (replaces showcues)
 
 """
@@ -1002,7 +1002,7 @@ class HlsParser:
         pull m3u8 and parse it.
         """
 
-        blue(f"{REV}Selected Rendition {NORM} {self.rendition} ")
+        blue(f"{REV}Rendition Selected {NORM} {self.rendition} ")
         print(f"{REV} Parsing Started  {NORM} {iso8601()}\n")
         self.base_uri = self.rendition.rsplit("/", 1)[0]
         self.sliding_window = SlidingWindow()
@@ -1015,15 +1015,20 @@ class HlsParser:
         """
         pick_one  if lines come from a master.m3u8
         find the first rendition and make a uri or return uri.
+        pick the first audio  only rendition or the last rendition found.
+        audio  only renditions are much smaller and parse much faster.
         """
         for line in lines:
             if line.startswith(b"#EXT-X-STREAM-INF"):
                 idx = lines.index(line) + 1
-                line = lines[idx].decode("utf-8")
+                nline = lines[idx].decode("utf-8")
                 base_url = uri.rsplit("/", 1)[0]
-                uri = base_url + "/" + line
+                uri = base_url + "/" + nline
                 uri.replace("\n", "")
                 print(f"{REV} Rendition Found {NORM} {uri} ")
+                if b'RESOLUTION' not in line:
+                    self.rendition=uri
+                    return
         self.rendition = uri
 
     def find_renditions(self, uri):
@@ -1090,7 +1095,7 @@ helpme = """
 
     To display this help:
 
-	threefive3 hls help
+	scte35 hls help
 
 [ Input ]
 
