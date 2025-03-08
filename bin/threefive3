@@ -18,10 +18,6 @@ from threefive3.sixfix import sixfix
 import cProfile
 
 # from sideways import cli as sidecli
-from threefive3.stuff import write2
-
-
-write2 = False
 
 REV = "\033[7;1m"
 NORM = "\033[27m\033[0m"
