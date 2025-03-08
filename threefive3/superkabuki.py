@@ -220,8 +220,6 @@ class SuperKabuki(Stream):
         """
         self.open_output()
         with self.outfile as outfile:
-            if not self._find_start():
-                return
             for pkt in self.iter_pkts():
                 pts = self.iframer.parse(pkt)  # insert on iframe
                 if pts:
@@ -264,7 +262,7 @@ class SuperKabuki(Stream):
             with reader(self.sidecar_file) as sidefile:
                 for line in sidefile:
                     line = line.decode().strip().split("#", 1)[0]
-                    if len(line):
+                    if line:
                         insert_pts, cue = line.split(",", 1)
                         insert_pts = float(insert_pts)
                         if insert_pts == 0.0:
