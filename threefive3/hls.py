@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-scte35.hls  hls.py
+threefive3.hls  hls.py
 (replaces showcues)
 
 """
