@@ -80,10 +80,8 @@ class IFramer:
     def _afc_approved(self, pkt):
         if self._pcr_flag(pkt):
             if self._rai_flag(pkt):
-                red("random access")
                 return True
         if self._abc_flags(pkt):
-            red("abc")
             return True
         return False
 
@@ -96,7 +94,6 @@ class IFramer:
             if pkt[idx + 3 : idx + 4] in [b"\xe0", b"\xc0", b"\xbd"]:
                 return True
         if self._nal(pkt):
-            red("nal")
             return True
         if self._afc_flag(pkt):
             return self._afc_approved(pkt)
@@ -108,8 +105,8 @@ class IFramer:
             if self._is_key(pkt):
                 pts = self._parse_pts(pkt)
                 pts = self._to90k(pts)
-        #  if not self.shush and pts:
-        #    print2(pts)
+                if not self.shush and pts:
+                    print2(pts)
         return pts
 
     def ticks(self, pkt):
