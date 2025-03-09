@@ -51,7 +51,7 @@ def red(message):
     red  print error messages in red to stderr.
 
     """
-    mesg = f" \033[107;31m {message} \033[0m\n "
+    mesg = f" \033[107;31m {message} \033[0m "
     print2(mesg)
 
 
@@ -60,5 +60,5 @@ def blue(message):
     blue  print info messages in blue to stderr.
 
     """
-    mesg = f"\033[34;107m{message} \033[0m\n"
+    mesg = f"\033[;107m\033[44m{message} \033[0m"
     print2(mesg)
