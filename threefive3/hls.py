@@ -863,7 +863,7 @@ class HlsParser:
             if self.sleep_duration == 0:
                 target_duration = atohif(line.split(":")[1])
                 self.sleep_duration = round(target_duration * 0.5, 3)
-                print(f"{REV} Target Duration {NORM} {target_duration}\n ")
+                print(f"\t{REV} Target Duration {NORM} {target_duration}\n ")
 
     def _mk_window_size(self, lines):
         return len([line for line in lines if "#EXTINF:" in line])
@@ -878,7 +878,7 @@ class HlsParser:
         if not self.window_size:
             self.window_size = self._mk_window_size(lines)
             self.sliding_window.size = self.window_size
-            print(f"{REV} Window Size {NORM} {self.window_size}\n")
+            print(f"\t{REV} Window Size {NORM} {self.window_size}\n")
 
     def update_cue_state(self):
         """
@@ -1001,9 +1001,9 @@ class HlsParser:
         """
         pull m3u8 and parse it.
         """
-
-        blue(f"{REV}Rendition Selected {NORM} {self.rendition} ")
         print(f"{REV} Parsing Started  {NORM} {iso8601()}\n")
+
+        print(f"\t{REV}Rendition Selected {NORM} {self.rendition} ")
         self.base_uri = self.rendition.rsplit("/", 1)[0]
         self.sliding_window = SlidingWindow()
         while self.reload:
@@ -1025,7 +1025,7 @@ class HlsParser:
                 base_url = uri.rsplit("/", 1)[0]
                 uri = base_url + "/" + nline
                 uri.replace("\n", "")
-                print(f"{REV} Rendition Found {NORM} {uri} ")
+                # print(f"{REV} Rendition Found {NORM} {uri} ")
                 if b'RESOLUTION' not in line:
                     self.rendition=uri
                     return
