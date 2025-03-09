@@ -16,6 +16,7 @@ from .new_reader import reader
 
 
 DGRAM_SIZE = 1316
+THIRTY_DGRAMS = 30 * DGRAM_SIZE
 
 DEFAULT_MULTICAST = "235.35.3.5:3535"
 
@@ -70,7 +71,7 @@ class GumS:
         now = time.time
         total_bytes = 0
         with reader(vid) as gum:
-            for dgram in iter(partial(gum.read, DGRAM_SIZE), b""):
+            for dgram in iter(partial(gum.read, THIRTY_DGRAMS), b""):
                 self.sock.sendto(dgram, self.dest_grp)
                 total_bytes += len(dgram)
                 elapsed = now() - start_time
@@ -120,7 +121,7 @@ def parse_args():
         help=f"""like "/home/a/vid.ts"
                 or "udp://@235.35.3.5:3535"
                 or "https://futzu.com/xaa.ts"
-                [ default:{REV}sys.stdin.buffer{NORM} ]
+                [default:{REV}sys.stdin.buffer{NORM}]
              """,
     )
 
@@ -128,30 +129,21 @@ def parse_args():
         "-a",
         "--addr",
         default=DEFAULT_MULTICAST,
-        help=f'Destination IP:Port like "227.1.3.10:4310"  [ default:{REV} 235.35.3.5:3535 {NORM} ]',
+        help=f"Destination IP:Port  [default:{REV}235.35.3.5:3535{NORM}]",
     )
 
     parser.add_argument(
         "-b",
         "--bind_addr",
         default="0.0.0.0",
-        help=f' Local IP to bind [ default:{REV}  0.0.0.0{NORM} ]',
+        help=f" Local IP to bind [default:{REV}0.0.0.0{NORM}]",
     )
 
     parser.add_argument(
         "-t",
         "--ttl",
         default=32,
-        help=f"Multicast TTL  between 1 and 255 [ default:{REV} 32 {NORM} ]",
-    )
-
-    parser.add_argument(
-        "-v",
-        "--version",
-        action="store_const",
-        default=False,
-        const=True,
-        help="Show version",
+        help=f"Multicast TTL (1 - 255) [default:{REV}32{NORM}]",
     )
 
     return parser.parse_args()
