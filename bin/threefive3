@@ -56,7 +56,7 @@ def mk_sidecar(cue):
 HELP = f"""
 {BLUE} threefive3 cli tool                                {U}
 
-    {B} Default      {U} {BLUE}The default action is to read a input and write a SCTE-35 output.{U}
+    {B} Default      {U} {BLUE}The default action is to read an input and write an output.{U}
 
     {BLUE}Inputs {U} mpegts, base64, hex, json, xml, and xmlbin{U}.
 
@@ -78,6 +78,9 @@ HELP = f"""
     threefive3 hls https://example.com/master.m3u8{U}
 
     {B} iframes     {U}{BLUE} show MPEGTS iframes{NORM} threefive3 iframes video.ts
+
+    {B}  mcast       {U}{BLUE} Create a Multicast Stream {NORM}   threefive3 mcast  -I video.ts
+    {U}{BLUE}See mcast  help {NORM} threefive3 mcast  help
 
     {B}  packets    {U}{NORM}{BLUE} Print raw SCTE-35 packets:{NORM} threefive3 packets udp://@235.35.3.5:3535
 
@@ -369,6 +372,19 @@ def chk_funk_map():
 cli_map = {"mcast": gumscli, "superkabuki": skcli}
 
 
+def dashdashhelp():
+    """
+    dashdashhelp swaps out "help" with "--help"
+    for keys in cli_map. Pure bureaucracy.
+    I still can't believe I can just edit sys.argv at will,
+    it kind of makes sense, since I wrote it in the first place,
+    but it just feels so wrong.
+    """
+    if "help" in sys.argv:
+        idx = sys.argv.index("help")
+        sys.argv[idx]= "--help"    
+
+
 def chk_cli_map():
     """
     chk_cli_map check if a
@@ -377,6 +393,7 @@ def chk_cli_map():
     """
     for k, v in cli_map.items():
         if k in sys.argv:
+            dashdashhelp()
             sys.argv[0] = f"{sys.argv[0]} {k}"
             sys.argv.remove(k)
             v()
@@ -385,9 +402,9 @@ def chk_cli_map():
 
 def go():
     chk_cli_map()
+    chk_print_map()
     if len(sys.argv) < 2:
         sys.argv.append("json")
-    chk_print_map()
     chk_mpegts_map()
     chk_funk_map()
 
