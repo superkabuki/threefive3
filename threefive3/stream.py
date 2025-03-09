@@ -305,11 +305,11 @@ class Stream:
         for piping into another program like mplayer.
         SCTE-35 cues are print2`ed to stderr.
         """
-        for pkt in self.iter_pkts():
-            cue = self._parse(pkt)
-            if cue:
-                func(cue)
-            sys.stdout.buffer.write(pkt)
+        num_pkts = 1400
+        for chunk in self.iter_pkts(num_pkts=num_pkts):
+            #  chunky = memoryview(bytearray(chunk))
+            self._decode2cues(chunk, func)
+            sys.stdout.buffer.write(chunk)
         return False
 
     def show(self):
