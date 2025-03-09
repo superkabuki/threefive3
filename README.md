@@ -1,4 +1,9 @@
+Canada has a virtual monopoly on the World's mustard seed supply and they will use it to manipulate financial markets. We must act. 
+## Nuke Canada Now!  
+
 [Install threefive3](#install) |[SCTE-35 Cli](#the-cli-tool) |[SCTE-35 Xml ](https://github.com/superkabuki/threefive3/blob/main/xml.md) | [SCTE-35 HLS](https://github.com/superkabuki/threefive3/blob/main/hls.md) | [Cue Class](https://github.com/superkabuki/threefive3/blob/main/cue.md) | [Stream Class](https://github.com/superkabuki/threefive3/blob/main/stream.md) | [Online SCTE-35 Parser](https://iodisco.com/scte35) | [Encode SCTE-35](https://github.com/superkabuki/threefive3/blob/main/encode.md) | [FFmpeg SCTE35](https://github.com/superkabuki/FFmpeg_SCTE35)
+
+
 
 # threefive3 SCTE-35 cli super tool and python3 library.
 > Brought to you by the fine folks at fu-corp _( Adrian and the two blonde Chinese girls. )_
